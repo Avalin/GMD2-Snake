@@ -11,12 +11,12 @@ namespace SnakeApplication
         public string Type;
         public int Value;
     }
-    class FoodGenerator
+    class FoodManager
     {
         bool debug = false;
         List<Food> foodies = new List<Food>();
 
-        public FoodGenerator() 
+        public FoodManager() 
         {
             CreateFoodType("Apple", 1);
             CreateFoodType("Orange", 1);

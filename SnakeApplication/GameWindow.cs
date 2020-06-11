@@ -15,9 +15,23 @@ namespace SnakeApplication
     {
         private bool debug = false;
         private TimeSpan lag = new TimeSpan(0);
+
+        // GAME MANAGERS
+        FoodManager foodManager;
+        MapManager mapManager;
+        GameStateManager gameStateManager;
+
         public GameWindow()
         {
             InitializeComponent();
+            GameManagers();
+        }
+
+        void GameManagers() 
+        {
+            gameStateManager = new GameStateManager(GameStateManager.GameState.Playing);
+            foodManager = new FoodManager();
+            mapManager = new MapManager(10, 10);
         }
 
         private void GameWindow_FormClosed(object sender, FormClosedEventArgs e)

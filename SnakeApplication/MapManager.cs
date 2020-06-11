@@ -11,15 +11,15 @@ namespace SnakeApplication
         public int X;
         public int Y;
     }
-    class MapGenerator
+    class MapManager
     {
-        private bool debug = true;
+        private bool debug = false;
         private int tileSize;
         private int mapSizeX;
         private int mapSizeY;
         LinkedList<Tile> tiles = new LinkedList<Tile>();
-
-        MapGenerator(int tileSize, int mapSizeX, int mapSizeY) 
+        
+        public MapManager(int tileSize, int mapSizeX, int mapSizeY) 
         {
             CreateRectangleMap(mapSizeX, mapSizeY);
             this.tileSize = tileSize;
@@ -35,7 +35,7 @@ namespace SnakeApplication
             }
             #endregion
         }
-        MapGenerator(int tileSize, int mapSize)
+        public MapManager(int tileSize, int mapSize)
         {
             CreateSquareMap(mapSize);
             this.tileSize = tileSize;
