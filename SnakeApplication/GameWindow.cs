@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace SnakeApplication
 {
-    public partial class Form1 : Form
+    public partial class Snake : Form
     {
-        public Form1()
+        public Snake()
         {
             InitializeComponent();
+        }
+
+        private void Snake_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }
