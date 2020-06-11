@@ -8,12 +8,12 @@ namespace SnakeApplication
 {
     struct Food 
     {
-        public string type;
-        public int value;
+        public string Type;
+        public int Value;
     }
     class FoodGenerator
     {
-        bool debug = true;
+        bool debug = false;
         List<Food> foodies = new List<Food>();
 
         public FoodGenerator() 
@@ -23,20 +23,24 @@ namespace SnakeApplication
             CreateFoodType("Tomato", 1);
             CreateFoodType("Durian", 2);
 
+            #region Debug Tool
             if (debug) 
             {
                 foreach (Food food in foodies) 
                 {
-                    Console.WriteLine(food.type + " is created with value " + food.value + ".");
+                    Console.WriteLine(food.Type + " is created with value " + food.Value + ".");
                 }
             }
+            #endregion debug
         }
 
         void CreateFoodType(string type, int value) 
         {
-            Food newFoodType = new Food();
-            newFoodType.type = type;
-            newFoodType.value = value;
+            Food newFoodType = new Food
+            {
+                Type = type,
+                Value = value
+            };
             foodies.Add(newFoodType);
         }
     }
