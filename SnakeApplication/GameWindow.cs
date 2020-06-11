@@ -13,6 +13,7 @@ namespace SnakeApplication
 {
     public partial class GameWindow : Form
     {
+        private TimeSpan lag = new TimeSpan(0);
         public GameWindow()
         {
             InitializeComponent();
@@ -26,13 +27,12 @@ namespace SnakeApplication
         internal void GameLoop()
         {
             TimeSpan MS_PER_FRAME = TimeSpan.FromMilliseconds(1.0 / 60.0 * 10000.0);
-            Stopwatch stopWatch = Stopwatch.StartNew();
-            TimeSpan previous = stopWatch.Elapsed;
-            TimeSpan lag = new TimeSpan(0);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            TimeSpan previous = stopwatch.Elapsed;
             while (true)
             {
 
-                TimeSpan current = stopWatch.Elapsed;
+                TimeSpan current = stopwatch.Elapsed;
                 TimeSpan elapsed = current - previous;
                 previous = current;
                 lag += elapsed;
@@ -42,12 +42,18 @@ namespace SnakeApplication
                 while (lag >= MS_PER_FRAME)
                 {
                     UpdateGameLogic();
-
                     lag -= MS_PER_FRAME;
                 }
+                Interpolate(stopwatch, previous);
                 RenderToScreen();
                 Refresh();
             }
+        }
+
+        private void Interpolate(Stopwatch s, TimeSpan previous)
+        {
+            //To avoid choppy rendering
+            lag += s.Elapsed - previous; 
         }
 
         private void ProcessInput(object sender, KeyEventArgs e)
