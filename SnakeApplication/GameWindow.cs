@@ -14,7 +14,7 @@ namespace SnakeApplication
     public partial class GameWindow : Form
     {
         private bool debug = true;
-        private TimeSpan lag = new TimeSpan(0);
+        private TimeSpan timeBuffer = new TimeSpan(0);
         private readonly List<Keys> input = new List<Keys>();
 
         // GAME MANAGERS
@@ -43,29 +43,27 @@ namespace SnakeApplication
             TimeSpan previous = stopwatch.Elapsed;
             while (true)
             {
-
                 TimeSpan current = stopwatch.Elapsed;
-                TimeSpan elapsed = current - previous;
+                TimeSpan deltaTime = current - previous;
                 previous = current;
-                lag += elapsed;
+                timeBuffer += deltaTime;
                 ProcessInput();
                 
                 //Fixed timestep for logics, varying for rendering
-                while (lag >= MS_PER_FRAME)
+                while (timeBuffer >= MS_PER_FRAME)
                 {
                     UpdateGameLogic();
-                    lag -= MS_PER_FRAME;
+                    timeBuffer -= MS_PER_FRAME;
                 }
-                Interpolate(stopwatch, previous);
-                RenderToScreen();
+                RenderToScreen(CalculateInterpolationAlpha(timeBuffer, MS_PER_FRAME));
                 Refresh();
             }
         }
 
-        private void Interpolate(Stopwatch s, TimeSpan previous)
+        private double CalculateInterpolationAlpha(TimeSpan timeBuffer, TimeSpan MS_PER_FRAME)
         {
             //To avoid choppy rendering
-            lag += s.Elapsed - previous; 
+            return timeBuffer.TotalMilliseconds / MS_PER_FRAME.TotalMilliseconds;
         }
 
         private void ProcessInput()
@@ -78,7 +76,6 @@ namespace SnakeApplication
                 switch (key)
                 {
                     case Keys.Space:
-                        //Pause game
                         if (debug) Console.WriteLine("Space is pressed");
                         gsm.PauseUnpauseGame();
                         break;
@@ -102,9 +99,11 @@ namespace SnakeApplication
             }
         }
 
-        private void RenderToScreen()
+        private void RenderToScreen(double interpolationAlpha)
         {
             if (debug) Console.WriteLine("Rendering to screen...");
+            // Render position = previous position * interpolation alpha + current position * (1 - interpolation alpha)
+
             Application.DoEvents();
         }
         private void UpdateGameLogic()

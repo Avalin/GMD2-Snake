@@ -10,10 +10,12 @@ namespace SnakeApplication
     {
         public int X;
         public int Y;
+        public TileItem Item;
     }
     class MapManager
     {
         private bool debug = false;
+
         private int tileSize;
         private int mapSizeX;
         private int mapSizeY;
@@ -52,6 +54,51 @@ namespace SnakeApplication
             #endregion
         }
 
+        #region Tile Get Methods
+        public Tile GetCenterTile()
+        {
+            int centerPoint = tiles.Count() / 2;
+            return tiles.ElementAt(centerPoint);
+        }
+
+        public Tile GetRandomTile() 
+        {
+            var random = new Random();
+            int range = random.Next(tiles.Count());
+            Tile randomTile = tiles.ElementAt(range);
+
+            //If tile already holds something, find another
+            if (randomTile.Item != null) GetRandomTile();
+            return randomTile;
+        }
+
+        public Tile GetTileAtPosition(int x, int y)
+        {
+            Tile foundTile = tiles.First();
+            foreach (Tile tile in tiles) 
+            {
+                if (tile.X == x && tile.Y == y) 
+                {
+                    foundTile = tile;
+                }
+            }
+            return foundTile;
+        }
+
+        public Tile GetTileWithItem(TileItem item)
+        {
+            foreach (Tile tile in tiles)
+            {
+                if (tile.Item == item)
+                {
+                    return tile;
+                }
+            }
+            return new Tile();
+        }
+        #endregion
+
+        #region Create Tile Map
         void CreateSquareMap(int size) 
         {
             mapSizeX = size;
@@ -66,24 +113,6 @@ namespace SnakeApplication
             InitializeTiles(mapSizeX, mapSizeY);
         }
 
-        void CreateTile(int x, int y) 
-        {
-            Tile tile = new Tile
-            {
-                X = x,
-                Y = y
-            };
-            tiles.AddLast(tile);
-        }
-        public int GetTileSize() 
-        {
-            return tileSize;
-        }
-
-        public void SetTileSize(int size)
-        {
-            tileSize = size;
-        }
         void InitializeTiles(int mapSizeX, int mapSizeY)
         {
             for (int x = 0; x < mapSizeX; x++)
@@ -93,6 +122,23 @@ namespace SnakeApplication
                     CreateTile(x, y);
                 }
             }
+        }
+
+        void CreateTile(int x, int y)
+        {
+            Tile tile = new Tile
+            {
+                X = x,
+                Y = y,
+                Item = null
+            };
+            tiles.AddLast(tile);
+        }
+        #endregion
+
+        public int GetTileSize() 
+        {
+            return tileSize;
         }
     }
 }

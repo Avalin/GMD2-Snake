@@ -1,35 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SnakeApplication
 {
-    class Snake
+    class Snake : Drawable
     {
-        bool debug = true;
-        int score;
-        int length;
+        private readonly bool debug = true;
+        private readonly SnakeDirection snakeDirection;
+        private int score;
 
-        public Snake(int length) 
+        private LinkedList<SnakeTail> snakeTails;
+        Graphics gfx = null;
+
+        public Snake(int length)
         {
             score = 0;
-            this.length = length;
+            snakeDirection = new SnakeDirection();
+            snakeTails = new LinkedList<SnakeTail>();
+            SetSnakeDirection(SnakeDirection.Direction.Right);
+
+            for (int i = 0; i <= length; i++) 
+            {
+                AddSnakeTail();
+            }
         }
 
-        void EatFood(Food food) 
+        public void SetSnakeDirection(SnakeDirection.Direction direction) 
         {
-            score += food.Value;
-            length++;
+            snakeDirection.SetCurrentDirection(direction);
+        }
+
+        public void AddSnakeTail() 
+        {
+            snakeTails.AddLast(new SnakeTail());
+        }
+
+        public void EatFood(Food food) 
+        {
+            score += food.value;
+            AddSnakeTail();
 
             #region Debug Tools
             if (debug) 
             {
-                Console.WriteLine("Snake ate " + food.Type + " for a value of " + food.Value + ".");
-                Console.WriteLine("Snake now has a score of " + score + " and a length of " + length + ".");
+                Console.WriteLine("Snake ate " + food.type + " for a value of " + food.value + ".");
+                Console.WriteLine("Snake now has a score of " + score + " and a length of " + snakeTails.Count() + ".");
             }
             #endregion Debug Tools
+        }
+
+        public void Draw()
+        {
+        
         }
     }
 }

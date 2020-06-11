@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 namespace SnakeApplication
 {
-    struct Food 
-    {
-        public string Type;
-        public int Value;
-    }
     class FoodManager
     {
         bool debug = false;
@@ -28,7 +23,7 @@ namespace SnakeApplication
             {
                 foreach (Food food in foodies) 
                 {
-                    Console.WriteLine(food.Type + " is created with value " + food.Value + ".");
+                    Console.WriteLine(food.type + " is created with value " + food.value + ".");
                 }
             }
             #endregion debug
@@ -36,12 +31,8 @@ namespace SnakeApplication
 
         void CreateFoodType(string type, int value) 
         {
-            Food newFoodType = new Food
-            {
-                Type = type,
-                Value = value
-            };
-            foodies.Add(newFoodType);
+            Food food = new Food(type, value);
+            foodies.Add(food);
         }
     }
 }
