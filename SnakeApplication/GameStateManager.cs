@@ -21,14 +21,17 @@ namespace SnakeApplication
             currentGameState = currentState;
         }
 
-        public void SetGameState(GameState gs) 
-        {
-            currentGameState = gs;
-        }
-
         public GameState GetGameState()
         {
             return currentGameState;
+        }
+
+        public void PauseUnpauseGame() 
+        {
+            if (currentGameState == GameState.Playing)
+                currentGameState = GameState.Pausing;
+            else if (currentGameState == GameState.Pausing)
+                currentGameState = GameState.Playing;
         }
     }
 }

@@ -30,14 +30,15 @@
         {
             this.SuspendLayout();
             // 
-            // Snake
+            // GameWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(378, 344);
-            this.Name = "Snake";
+            this.Name = "GameWindow";
             this.Text = "Snake";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.GameWindow_FormClosed);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GameWindow_KeyDown);
             this.ResumeLayout(false);
 
         }
