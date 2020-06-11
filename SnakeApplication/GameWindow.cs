@@ -17,6 +17,7 @@ namespace SnakeApplication
         public GameWindow()
         {
             InitializeComponent();
+            FoodGenerator fg = new FoodGenerator();
         }
 
         private void GameWindow_FormClosed(object sender, FormClosedEventArgs e)

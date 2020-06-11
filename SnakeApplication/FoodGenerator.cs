@@ -27,7 +27,7 @@ namespace SnakeApplication
             {
                 foreach (Food food in foodies) 
                 {
-                    Console.WriteLine(food.type + " is created with" + food.value + "value.");
+                    Console.WriteLine(food.type + " is created with value " + food.value + ".");
                 }
             }
         }
