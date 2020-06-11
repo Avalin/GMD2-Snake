@@ -13,6 +13,7 @@ namespace SnakeApplication
 {
     public partial class GameWindow : Form
     {
+        private bool debug = false;
         private TimeSpan lag = new TimeSpan(0);
         public GameWindow()
         {
@@ -37,8 +38,8 @@ namespace SnakeApplication
                 TimeSpan elapsed = current - previous;
                 previous = current;
                 lag += elapsed;
-
                 //ProcessInput();
+                
                 //Fixed timestep for logics, varying for rendering
                 while (lag >= MS_PER_FRAME)
                 {
@@ -59,17 +60,18 @@ namespace SnakeApplication
 
         private void ProcessInput(object sender, KeyEventArgs e)
         {
-            //Input events here
+            if (debug) Console.WriteLine("Processing input...");
         }
 
         private void RenderToScreen()
         {
-            //Render events here
+            if (debug) Console.WriteLine("Rendering to screen...");
             Application.DoEvents();
         }
 
         private void UpdateGameLogic()
         {
+            if (debug) Console.WriteLine("Updating game logic...");
 
         }
     }
