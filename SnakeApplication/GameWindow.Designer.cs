@@ -1,6 +1,6 @@
 ﻿namespace SnakeApplication
 {
-    partial class Snake
+    partial class GameWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -37,7 +37,7 @@
             this.ClientSize = new System.Drawing.Size(378, 344);
             this.Name = "Snake";
             this.Text = "Snake";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Snake_FormClosed);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.GameWindow_FormClosed);
             this.ResumeLayout(false);
 
         }

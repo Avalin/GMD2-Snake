@@ -10,16 +10,21 @@ using System.Windows.Forms;
 
 namespace SnakeApplication
 {
-    public partial class Snake : Form
+    public partial class GameWindow : Form
     {
-        public Snake()
+        public GameWindow()
         {
             InitializeComponent();
         }
 
-        private void Snake_FormClosed(object sender, FormClosedEventArgs e)
+        private void GameWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
             Environment.Exit(0);
+        }
+
+        private void GameLoop()
+        {
+            
         }
     }
 }

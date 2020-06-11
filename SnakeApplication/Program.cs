@@ -16,7 +16,10 @@ namespace SnakeApplication
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Snake());
+
+            GameWindow gw = new GameWindow();
+            gw.Show();
+            gw.GameLoop();
         }
     }
 }
