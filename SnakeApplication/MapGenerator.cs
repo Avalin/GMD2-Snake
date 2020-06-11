@@ -13,7 +13,7 @@ namespace SnakeApplication
     }
     class MapGenerator
     {
-        private bool debug;
+        private bool debug = true;
         private int tileSize;
         private int mapSizeX;
         private int mapSizeY;
@@ -23,11 +23,33 @@ namespace SnakeApplication
         {
             CreateRectangleMap(mapSizeX, mapSizeY);
             this.tileSize = tileSize;
+            
+            #region Debug Tools
+            if (debug) 
+            {
+                for (int i = 0; i < mapSizeX*mapSizeY; i++)
+                {
+                    Console.WriteLine("Tile at position " + tiles.ElementAt(i).X + ", " + tiles.ElementAt(i).Y + ".");
+                }
+                Console.WriteLine("There are " + tiles.Count() + " tiles in the list.");
+            }
+            #endregion
         }
         MapGenerator(int tileSize, int mapSize)
         {
             CreateSquareMap(mapSize);
             this.tileSize = tileSize;
+
+            #region Debug Tools
+            if (debug)
+            {
+                for (int i = 0; i < mapSize * mapSize; i++)
+                {
+                    Console.WriteLine("Tile at position " + tiles.ElementAt(i).X + ", " + tiles.ElementAt(i).Y + ".");
+                }
+                Console.WriteLine("There are "+ tiles.Count()+ " tiles in the list.");
+            }
+            #endregion
         }
 
         void CreateSquareMap(int size) 
@@ -42,17 +64,6 @@ namespace SnakeApplication
             mapSizeX = sizeX;
             mapSizeY = sizeY;
             InitializeTiles(mapSizeX, mapSizeY);
-        }
-
-        void InitializeTiles(int mapSizeX, int mapSizeY)
-        {
-            for (int x = 0; x < mapSizeX; x++)
-            {
-                for (int y = 0; y < mapSizeY; y++)
-                {
-                    CreateTile(x, y);
-                }
-            }
         }
 
         void CreateTile(int x, int y) 
@@ -72,6 +83,16 @@ namespace SnakeApplication
         public void SetTileSize(int size)
         {
             tileSize = size;
+        }
+        void InitializeTiles(int mapSizeX, int mapSizeY)
+        {
+            for (int x = 0; x < mapSizeX; x++)
+            {
+                for (int y = 0; y < mapSizeY; y++)
+                {
+                    CreateTile(x, y);
+                }
+            }
         }
     }
 }
