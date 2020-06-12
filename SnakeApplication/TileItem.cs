@@ -9,7 +9,6 @@ namespace SnakeApplication
 {
     abstract class TileItem
     {
-        public abstract void GetImage();
         public abstract void OnCollision();
     }
 }
