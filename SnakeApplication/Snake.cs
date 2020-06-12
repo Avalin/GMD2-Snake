@@ -13,14 +13,13 @@ namespace SnakeApplication
         private readonly SnakeDirection snakeDirection;
         private int score;
 
-        private LinkedList<SnakeTail> snakeTails;
-        Graphics snakeHeadIMG = null;
+        private LinkedList<SnakePart> snakeParts;
 
         public Snake(int length)
         {
             score = 0;
             snakeDirection = new SnakeDirection();
-            snakeTails = new LinkedList<SnakeTail>();
+            snakeParts = new LinkedList<SnakePart>();
             SetSnakeDirection(SnakeDirection.Direction.Right);
 
             for (int i = 0; i <= length; i++) 
@@ -34,9 +33,22 @@ namespace SnakeApplication
             snakeDirection.SetCurrentDirection(direction);
         }
 
+        public int GetSnakeLength() 
+        {
+            return snakeParts.Count();
+        }
+
+        public SnakePart GetSnakePart(int i)
+        {
+            return snakeParts.ElementAt(i);
+        }
+
         public void AddSnakeTail() 
         {
-            snakeTails.AddLast(new SnakeTail());
+            snakeParts.AddLast(new SnakePart());
+
+            snakeParts.First().SetSnakePartType(SnakePart.PartType.Head);
+            snakeParts.Last().SetSnakePartType(SnakePart.PartType.Tail);
         }
 
         public void EatFood(Food food) 
@@ -48,24 +60,13 @@ namespace SnakeApplication
             if (debug) 
             {
                 Console.WriteLine("Snake ate " + food.type + " for a value of " + food.value + ".");
-                Console.WriteLine("Snake now has a score of " + score + " and a length of " + snakeTails.Count() + ".");
+                Console.WriteLine("Snake now has a score of " + score + " and a length of " + snakeParts.Count() + ".");
             }
             #endregion Debug Tools
         }
 
         public void Draw()
         {
-
-            //Bitmap bitmap = new Bitmap(pb_snakeHead.Width, canvas.Height);
-            ///Graphics graphics = Graphics.FromImage(bitmap);
-
-            //graphics.FillRectangle(spacePressed ? new SolidBrush(Color.Crimson) : new SolidBrush(Color.Blue), 100, 100, 200, 200);
-
-            //canvas.Image = bitmap;
-
-            //snakeHeadIMG = Graphics.FromImage(Properties.Resources.SnakeHead);
-            //snakeHeadIMG.DrawImage(Properties.Resources.SnakeHead, 10, 10, 1000, 1000);
-            //snakeHeadIMG.DrawString("Food eaten: ", new Font("Arial", 10), new SolidBrush(Color.Black), 210, 475);
 
         }
     }

@@ -124,6 +124,11 @@ namespace SnakeApplication
             if (debug) Console.WriteLine("Rendering to screen...");
             // Render position = previous position * interpolation alpha + current position * (1 - interpolation alpha)
             snake.Draw();
+
+            var snakeColor = new SolidBrush(Color.Gray);
+            for (int i = 0; i < snake.GetSnakeLength(); ++i)
+                gfx.FillRectangle(snakeColor, mapManager.GetTileSize() * snake[i].PosX, squareSize * snake.blocksOfSnake[i].PosY, squareSize - 1, squareSize - 1);
+
             Application.DoEvents();
         }
         private void UpdateGameLogic()
