@@ -140,5 +140,10 @@ namespace SnakeApplication
         {
             return tileSize;
         }
+
+        public int[] GetMapSize()
+        {
+            return new int[]{ mapSizeX, mapSizeY };
+        }
     }
 }

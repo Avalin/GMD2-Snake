@@ -14,10 +14,19 @@ namespace SnakeApplication
     public partial class GameWindow : Form
     {
         private bool debug = true;
+        
+        //Update
         private TimeSpan timeBuffer = new TimeSpan(0);
+        
+        //Input
         private readonly List<Keys> input = new List<Keys>();
-        List<Drawable> drawables = new List<Drawable>();
-        Snake snake = new Snake(3);
+        
+        //Render
+        private List<Drawable> drawables = new List<Drawable>();
+        private Graphics gfx = null;
+        private Image img = null;
+
+        private Snake snake = new Snake(3);
 
         // GAME MANAGERS
         FoodManager foodManager;
@@ -28,13 +37,22 @@ namespace SnakeApplication
         {
             InitializeComponent();
             GameManagers();
+            InitializeGraphics();
         }
 
-        void GameManagers() 
+        void GameManagers()
         {
             gsm = new GameStateManager(GameStateManager.GameState.Playing);
             foodManager = new FoodManager();
             mapManager = new MapManager(10, 10);
+        }
+
+        void InitializeGraphics() 
+        {
+            img = new Bitmap(
+                mapManager.GetTileSize()*mapManager.GetMapSize()[0], 
+                mapManager.GetTileSize()*mapManager.GetMapSize()[1]);
+            gfx = Graphics.FromImage(img);
         }
 
         #region Game Loop Methods
@@ -125,11 +143,5 @@ namespace SnakeApplication
             input.Add(e.KeyCode);
         }
         #endregion
-
-        private void GameWindow_Load(object sender, EventArgs e)
-        {
-
-        }
-
     }
 }
