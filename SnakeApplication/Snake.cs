@@ -14,7 +14,7 @@ namespace SnakeApplication
         private int score;
 
         private LinkedList<SnakeTail> snakeTails;
-        Graphics gfx = null;
+        Graphics snakeHeadIMG = null;
 
         public Snake(int length)
         {
@@ -55,7 +55,18 @@ namespace SnakeApplication
 
         public void Draw()
         {
-        
+
+            //Bitmap bitmap = new Bitmap(pb_snakeHead.Width, canvas.Height);
+            ///Graphics graphics = Graphics.FromImage(bitmap);
+
+            //graphics.FillRectangle(spacePressed ? new SolidBrush(Color.Crimson) : new SolidBrush(Color.Blue), 100, 100, 200, 200);
+
+            //canvas.Image = bitmap;
+
+            //snakeHeadIMG = Graphics.FromImage(Properties.Resources.SnakeHead);
+            //snakeHeadIMG.DrawImage(Properties.Resources.SnakeHead, 10, 10, 1000, 1000);
+            //snakeHeadIMG.DrawString("Food eaten: ", new Font("Arial", 10), new SolidBrush(Color.Black), 210, 475);
+
         }
     }
 }

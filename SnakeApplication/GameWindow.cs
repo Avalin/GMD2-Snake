@@ -16,6 +16,8 @@ namespace SnakeApplication
         private bool debug = true;
         private TimeSpan timeBuffer = new TimeSpan(0);
         private readonly List<Keys> input = new List<Keys>();
+        List<Drawable> drawables = new List<Drawable>();
+        Snake snake = new Snake(3);
 
         // GAME MANAGERS
         FoodManager foodManager;
@@ -103,7 +105,7 @@ namespace SnakeApplication
         {
             if (debug) Console.WriteLine("Rendering to screen...");
             // Render position = previous position * interpolation alpha + current position * (1 - interpolation alpha)
-
+            snake.Draw();
             Application.DoEvents();
         }
         private void UpdateGameLogic()
@@ -123,5 +125,11 @@ namespace SnakeApplication
             input.Add(e.KeyCode);
         }
         #endregion
+
+        private void GameWindow_Load(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }
