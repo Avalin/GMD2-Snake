@@ -11,13 +11,11 @@ namespace SnakeApplication
     {
         private readonly bool debug = true;
         private readonly SnakeMover snakeMover;
-        private int score;
 
         private LinkedList<SnakePart> snakeParts;
 
         public Snake(int length)
         {
-            score = 0;
             snakeMover = new SnakeMover();
             snakeParts = new LinkedList<SnakePart>();
 
@@ -61,14 +59,14 @@ namespace SnakeApplication
 
         public void EatFood(Food food) 
         {
-            score += food._Value;
+            GameStateManager.AddPointsToScore(food._Value);
             AddSnakePart();
 
             #region Debug Tools
             if (debug) 
             {
                 Console.WriteLine("Snake ate " + food._FoodType + " for a value of " + food._Value + ".");
-                Console.WriteLine("Snake now has a score of " + score + " and a length of " + snakeParts.Count() + ".");
+                Console.WriteLine("Snake now has a score of " + GameStateManager.GetScore() + " and a length of " + snakeParts.Count() + ".");
             }
             #endregion Debug Tools
         }
