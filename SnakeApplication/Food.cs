@@ -1,26 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SnakeApplication.Properties;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SnakeApplication
 {
     class Food : TileItem, Drawable
     {
-        public string type;
-        public int value;
+        private Image foodImg;
+        public int _Value { get; set; }
+        public FoodType _FoodType { get; set; }
 
-        public Food(string type, int value) 
+        public enum FoodType
         {
-            this.type = type;
-            this.value = value;
+            Pizza,
+            Cheese,
+            Cookie
         }
 
-        public void Draw()
-        {
 
+        public Food(FoodType foodType, int value) 
+        {
+            _FoodType = foodType;
+            _Value = value;
+            AssignImage();
+        }
+
+        private void AssignImage() 
+        {
+            switch (_FoodType)
+            {
+                case FoodType.Pizza:
+                    foodImg = Resources.Pizza;
+                    break;
+                case FoodType.Cheese:
+                    foodImg = Resources.Pizza;
+                    break;
+                case FoodType.Cookie:
+                    foodImg = Resources.Pizza;
+                    break;
+                default:
+                    foodImg = Resources.Pizza;
+                    break;
+            }
+        }
+
+        public void Draw(MapManager mm, Graphics gfx)
+        {
+            Tile tile = mm.GetTileWithItem(this);
+            gfx.DrawImage(foodImg, tile.X* mm.GetTileSize(), tile.Y* mm.GetTileSize(), mm.GetTileSize(), mm.GetTileSize());
         }
 
         public override void OnCollision()

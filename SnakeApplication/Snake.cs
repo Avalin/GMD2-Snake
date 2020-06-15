@@ -10,7 +10,7 @@ namespace SnakeApplication
     class Snake : Drawable
     {
         private readonly bool debug = true;
-        private readonly SnakeDirection snakeDirection;
+        private readonly SnakeMover snakeMover;
         private int score;
 
         private LinkedList<SnakePart> snakeParts;
@@ -18,19 +18,13 @@ namespace SnakeApplication
         public Snake(int length)
         {
             score = 0;
-            snakeDirection = new SnakeDirection();
+            snakeMover = new SnakeMover();
             snakeParts = new LinkedList<SnakePart>();
-            SetSnakeDirection(SnakeDirection.Direction.Right);
 
-            for (int i = 0; i <= length; i++) 
+            for (int i = 0; i < length; i++) 
             {
-                AddSnakeTail();
+                AddSnakePart();
             }
-        }
-
-        public void SetSnakeDirection(SnakeDirection.Direction direction) 
-        {
-            snakeDirection.SetCurrentDirection(direction);
         }
 
         public int GetSnakeLength() 
@@ -38,36 +32,78 @@ namespace SnakeApplication
             return snakeParts.Count();
         }
 
+        public SnakePart GetSnakeHead()
+        {
+            return snakeParts.ElementAt(snakeParts.Count-1);
+        }
+
         public SnakePart GetSnakePart(int i)
         {
             return snakeParts.ElementAt(i);
         }
 
-        public void AddSnakeTail() 
+        public void AddSnakePart() 
         {
-            snakeParts.AddLast(new SnakePart());
-
-            snakeParts.First().SetSnakePartType(SnakePart.PartType.Head);
-            snakeParts.Last().SetSnakePartType(SnakePart.PartType.Tail);
+            if (snakeParts.Count() == 0)
+            {
+                snakeParts.AddFirst(new SnakePart());
+                snakeParts.First.Value.SetSnakePartType(SnakePart.PartType.Head);
+            }
+            else 
+            {
+                snakeParts.AddFirst(new SnakePart());
+                if (snakeParts.First.Next.Value.GetSnakePartType() == SnakePart.PartType.Tail) 
+                {
+                    snakeParts.First.Next.Value.SetSnakePartType(SnakePart.PartType.Body);
+                }
+            }
         }
 
         public void EatFood(Food food) 
         {
-            score += food.value;
-            AddSnakeTail();
+            score += food._Value;
+            AddSnakePart();
 
             #region Debug Tools
             if (debug) 
             {
-                Console.WriteLine("Snake ate " + food.type + " for a value of " + food.value + ".");
+                Console.WriteLine("Snake ate " + food._FoodType + " for a value of " + food._Value + ".");
                 Console.WriteLine("Snake now has a score of " + score + " and a length of " + snakeParts.Count() + ".");
             }
             #endregion Debug Tools
         }
 
-        public void Draw()
+        public void AddSnakeToMap(MapManager mm)
         {
+            SnakePart snakeTail = snakeParts.First();
+            mm.PlaceItemOnTile(mm.GetCenterTile(), snakeTail);
+            Tile currentTile;
 
+            for (LinkedListNode<SnakePart> spNode = snakeParts.First; spNode != null;) 
+            {
+                LinkedListNode<SnakePart> nextNode = spNode.Next;
+                currentTile = mm.GetTileWithItem(spNode.Value);
+                if (nextNode != null) 
+                {
+                    Tile tile = mm.FindLeftNeighbourToTile(currentTile);
+                    if(tile == null) { throw new Exception("unable to find left neighbour tile"); }
+                    mm.PlaceItemOnTile(tile, nextNode.Value);
+                }
+                spNode = nextNode;
+            }
+        }
+
+        public void Update(MapManager mm) 
+        {
+            snakeMover.MoveSnakeParts(snakeParts, mm);
+        }
+
+        public void Draw(MapManager mm, Graphics gfx)
+        {
+            foreach (SnakePart sp in snakeParts) 
+            {
+                sp.Draw(mm, gfx);
+            }
         }
     }
 }

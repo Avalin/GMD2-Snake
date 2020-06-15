@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SnakeApplication
@@ -23,36 +18,52 @@ namespace SnakeApplication
         
         //Render
         private List<Drawable> drawables = new List<Drawable>();
-        private Graphics gfx = null;
+        private Graphics gfx_details = null;
+        private Graphics gfx_main = null;
         private Image img = null;
-
-        private Snake snake = new Snake(3);
 
         // GAME MANAGERS
         FoodManager foodManager;
         MapManager mapManager;
         GameStateManager gsm;
 
+        //Game Items
+        Snake snake;
+        Food food;
+
+
         public GameWindow()
         {
             InitializeComponent();
             GameManagers();
             InitializeGraphics();
+
+            snake = new Snake(4);
+            snake.AddSnakeToMap(mapManager);
+            food = foodManager.SpawnFoodOnTile(mapManager);
+        }
+
+        void ClearDrawSpace()
+        {
+            int[] xy = mapManager.GetMapSize();
+            int tileSize = mapManager.GetTileSize();
+            gfx_details.FillRectangle(new SolidBrush(Color.LightBlue), 0, 0, tileSize * xy[0], tileSize * xy[1]);
         }
 
         void GameManagers()
         {
             gsm = new GameStateManager(GameStateManager.GameState.Playing);
             foodManager = new FoodManager();
-            mapManager = new MapManager(10, 10);
+            mapManager = new MapManager(32, 16, 10);
         }
 
         void InitializeGraphics() 
         {
             img = new Bitmap(
-                mapManager.GetTileSize()*mapManager.GetMapSize()[0], 
-                mapManager.GetTileSize()*mapManager.GetMapSize()[1]);
-            gfx = Graphics.FromImage(img);
+                mapManager.GetTileSize() * mapManager.GetMapSize()[0],
+                mapManager.GetTileSize() * mapManager.GetMapSize()[1]);
+            gfx_main = PB_background.CreateGraphics();
+            gfx_details = Graphics.FromImage(img);
         }
 
         #region Game Loop Methods
@@ -76,7 +87,6 @@ namespace SnakeApplication
                     timeBuffer -= MS_PER_FRAME;
                 }
                 RenderToScreen(CalculateInterpolationAlpha(timeBuffer, MS_PER_FRAME));
-                Refresh();
             }
         }
 
@@ -102,20 +112,32 @@ namespace SnakeApplication
 
                     case Keys.W:
                         if(debug) Console.WriteLine("W is pressed");
+                        ChangeSnakeDirection(SnakeDirection.Direction.Up, SnakeDirection.Direction.Down);
                         break;
 
                     case Keys.A:
                         if (debug) Console.WriteLine("A is pressed");
+                        ChangeSnakeDirection(SnakeDirection.Direction.Left, SnakeDirection.Direction.Right);
                         break;
 
                     case Keys.S:
                         if (debug) Console.WriteLine("S is pressed");
+                        ChangeSnakeDirection(SnakeDirection.Direction.Down, SnakeDirection.Direction.Up);
                         break;
 
                     case Keys.D:
                         if (debug) Console.WriteLine("D is pressed");
+                        ChangeSnakeDirection(SnakeDirection.Direction.Right, SnakeDirection.Direction.Left);
                         break;
                 }
+            }
+        }
+
+        private void ChangeSnakeDirection(SnakeDirection.Direction newDirection, SnakeDirection.Direction oppositeDirection) 
+        {
+            if (snake.GetSnakeHead().GetSnakeDirection().GetCurrentDirection() != oppositeDirection)
+            {
+                snake.GetSnakeHead().GetSnakeDirection().SetCurrentDirection(newDirection);
             }
         }
 
@@ -123,17 +145,23 @@ namespace SnakeApplication
         {
             if (debug) Console.WriteLine("Rendering to screen...");
             // Render position = previous position * interpolation alpha + current position * (1 - interpolation alpha)
-            snake.Draw();
+            ClearDrawSpace();
 
-            var snakeColor = new SolidBrush(Color.Gray);
-            for (int i = 0; i < snake.GetSnakeLength(); ++i)
-                gfx.FillRectangle(snakeColor, mapManager.GetTileSize() * snake[i].PosX, squareSize * snake.blocksOfSnake[i].PosY, squareSize - 1, squareSize - 1);
-
+            DrawDrawables();
+            gfx_main.DrawImage(img, 0, 0);
             Application.DoEvents();
         }
+        void DrawDrawables() 
+        {
+            //gfx_details.DrawImage(Properties.Resources.SnakeBody, 0, 0, 32, 32);
+            snake.Draw(mapManager, gfx_details);
+            food.Draw(mapManager, gfx_details);
+        }
+
         private void UpdateGameLogic()
         {
             if (debug) Console.WriteLine("Updating game logic...");
+            snake.Update(mapManager);
         }
         #endregion
 

@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace SnakeApplication
 {
-    class SnakePart : TileItem
+    class SnakePart : TileItem, Drawable
     {
+        private readonly bool debug = false;
         private Bitmap snakeImg;
+        private readonly SnakeDirection snakeDirection;
         public enum PartType
         {
             Head,
@@ -21,8 +23,44 @@ namespace SnakeApplication
 
         public SnakePart() 
         {
-            SetSnakePartType(PartType.Body);
+            SetSnakePartType(PartType.Tail);
+            snakeDirection = new SnakeDirection();
         }
+
+        public SnakeDirection GetSnakeDirection() 
+        {
+            return snakeDirection;
+        }
+
+        public void SetSnakePartDirection(SnakeDirection.Direction direction)
+        {
+            snakeDirection.SetCurrentDirection(direction);
+
+            switch (snakeDirection.GetCurrentDirection())
+            {
+                case SnakeDirection.Direction.Up:
+                    if (debug) Console.WriteLine("Direction is upwards");
+                    snakeImg.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                    break;
+
+                case SnakeDirection.Direction.Down:
+                    if (debug) Console.WriteLine("Direction is downwards");
+                    snakeImg.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                    break;
+
+                case SnakeDirection.Direction.Left:
+                    if (debug) Console.WriteLine("Direction is left");
+                    snakeImg.RotateFlip(RotateFlipType.RotateNoneFlipNone);
+                    break;
+
+                case SnakeDirection.Direction.Right:
+                    if (debug) Console.WriteLine("Direction is right");
+                    snakeImg.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                    break;
+            }
+        }
+
+
 
         public void SetSnakePartType(PartType type) 
         {
@@ -54,8 +92,21 @@ namespace SnakeApplication
                     snakeImg = Resources.SnakeTail;
                     break;
                 default:
-                    snakeImg = Resources.SnakeBody;
+                    snakeImg = Resources.SnakeTail;
                     break; 
+            }
+        }
+
+        public void Draw(MapManager mm, Graphics gfx)
+        {
+            Tile tile = mm.GetTileWithItem(this);
+            if (tile == null)
+            {
+                throw new Exception("unable to find tile for snake part");
+            }
+            else
+            {
+                gfx.DrawImage(snakeImg, tile.X * mm.GetTileSize(), tile.Y * mm.GetTileSize(), snakeImg.Width, snakeImg.Height);
             }
         }
     }

@@ -8,7 +8,6 @@ namespace SnakeApplication
 {
     class SnakeDirection
     {
-        bool debug = false;
         public enum Direction
         {
             Up,
@@ -16,29 +15,16 @@ namespace SnakeApplication
             Left,
             Right,
         }
-        Direction currentDirection;
+        Direction currentDirection = Direction.Left;
+
+        public Direction GetCurrentDirection() 
+        {
+            return currentDirection;
+        }
 
         public void SetCurrentDirection(Direction direction) 
         {
             currentDirection = direction;
-            switch (currentDirection)
-            {
-                case Direction.Up:
-                    if (debug) Console.WriteLine("Direction is upwards");
-                    break;
-
-                case Direction.Down:
-                    if (debug) Console.WriteLine("Direction is downwards");
-                    break;
-
-                case Direction.Left:
-                    if (debug) Console.WriteLine("Direction is left");
-                    break;
-
-                case Direction.Right:
-                    if (debug) Console.WriteLine("Direction is right");
-                    break;
-            }
         }
     }
 }
