@@ -27,7 +27,6 @@ namespace SnakeApplication
                     }
                     
                     mm.PlaceItemOnTile(nextTile, snakePartNode.Value);
-                    currentTile = nextTile;
                 }
                 else 
                 {
@@ -44,7 +43,6 @@ namespace SnakeApplication
 
         Tile FindDestinationTile(MapManager mm, SnakePart snakeHead) 
         {
-            Console.WriteLine("Penis " + snakeHead.GetSnakeDirection().GetCurrentDirection());
             switch (snakeHead.GetSnakeDirection().GetCurrentDirection()) 
             {
                 case SnakeDirection.Direction.Up:

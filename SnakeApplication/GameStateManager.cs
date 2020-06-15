@@ -15,7 +15,7 @@ namespace SnakeApplication
             Pausing,
             Over
         }
-        GameState currentGameState;
+        static GameState currentGameState;
 
         public GameStateManager(GameState currentState) 
         {
@@ -40,6 +40,11 @@ namespace SnakeApplication
         public GameState GetGameState()
         {
             return currentGameState;
+        }
+
+        public static void EndGame()
+        {
+            currentGameState = GameStateManager.GameState.Over;
         }
 
         public void PauseUnpauseGame() 

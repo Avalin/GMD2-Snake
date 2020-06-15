@@ -72,7 +72,7 @@ namespace SnakeApplication
             TimeSpan MS_PER_FRAME = TimeSpan.FromMilliseconds(1.0 / 60.0 * 10000.0);
             Stopwatch stopwatch = Stopwatch.StartNew();
             TimeSpan previous = stopwatch.Elapsed;
-            while (true)
+            while (gsm.GetGameState() != GameStateManager.GameState.Over)
             {
                 TimeSpan current = stopwatch.Elapsed;
                 TimeSpan deltaTime = current - previous;

@@ -75,7 +75,7 @@ namespace SnakeApplication
 
         public override void OnCollision()
         {
-
+            GameStateManager.EndGame();
         }
 
         private void AssignImage() 
