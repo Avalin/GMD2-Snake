@@ -11,6 +11,7 @@ namespace SnakeApplication
     class SnakePart : TileItem, Drawable
     {
         private readonly bool debug = false;
+        private Bitmap snakeImgSource;
         private Bitmap snakeImg;
         private readonly SnakeDirection snakeDirection;
         public enum PartType
@@ -25,6 +26,7 @@ namespace SnakeApplication
         {
             SetSnakePartType(PartType.Tail);
             snakeDirection = new SnakeDirection();
+            SetSnakePartDirection(SnakeDirection.Direction.Left);
         }
 
         public SnakeDirection GetSnakeDirection() 
@@ -40,27 +42,25 @@ namespace SnakeApplication
             {
                 case SnakeDirection.Direction.Up:
                     if (debug) Console.WriteLine("Direction is upwards");
-                    //snakeImg.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                    snakeImg = Program.RotateImage(snakeImgSource, 90);
                     break;
 
                 case SnakeDirection.Direction.Down:
                     if (debug) Console.WriteLine("Direction is downwards");
-                    //snakeImg.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                    snakeImg = Program.RotateImage(snakeImgSource, 270);
                     break;
 
                 case SnakeDirection.Direction.Left:
                     if (debug) Console.WriteLine("Direction is left");
-                    //snakeImg.RotateFlip(RotateFlipType.RotateNoneFlipNone);
+                    snakeImg = snakeImgSource;
                     break;
 
                 case SnakeDirection.Direction.Right:
                     if (debug) Console.WriteLine("Direction is right");
-                    //snakeImg.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                    snakeImg = Program.RotateImage(snakeImgSource, 180);
                     break;
             }
         }
-
-
 
         public void SetSnakePartType(PartType type) 
         {
@@ -84,15 +84,19 @@ namespace SnakeApplication
             switch (currentPartType) 
             {
                 case PartType.Head:
+                    snakeImgSource = Resources.SnakeHead;
                     snakeImg = Resources.SnakeHead;
                     break;
                 case PartType.Body:
+                    snakeImgSource = Resources.SnakeBody;
                     snakeImg = Resources.SnakeBody;
                     break;
                 case PartType.Tail:
+                    snakeImgSource = Resources.SnakeTail;
                     snakeImg = Resources.SnakeTail;
                     break;
                 default:
+                    snakeImgSource = Resources.SnakeTail;
                     snakeImg = Resources.SnakeTail;
                     break; 
             }

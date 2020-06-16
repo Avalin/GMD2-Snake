@@ -127,10 +127,10 @@ namespace SnakeApplication
 
         private void ChangeSnakeDirection(SnakeDirection.Direction newDirection) 
         {
-            SnakeDirection sd = gsm.GetSnake().GetSnakeHead().GetSnakeDirection();
-            if (newDirection != sd.GetOppositeDirection())
+            SnakePart snakeHead = gsm.GetSnake().GetSnakeHead();
+            if (newDirection != snakeHead.GetSnakeDirection().GetOppositeDirection())
             {
-                sd.SetCurrentDirection(newDirection);
+                snakeHead.SetSnakePartDirection(newDirection);
             }
         }
 
