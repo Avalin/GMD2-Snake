@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace SnakeApplication
@@ -46,7 +45,7 @@ namespace SnakeApplication
                 timeBuffer += deltaTime;
                 inputManager.ProcessInput();
 
-                //Fixed timestep for logics, varying for rendering
+                //Fixed timestep for logics
                 while (timeBuffer >= MS_PER_FRAME)
                 {
                     if (gameStateManager.GetGameState() == GameState.Playing)
@@ -55,6 +54,7 @@ namespace SnakeApplication
                     }
                     timeBuffer -= MS_PER_FRAME;
                 }
+                //Variable timestep for rendering
                 renderManager.RenderToScreen(CalculateInterpolationAlpha(timeBuffer, MS_PER_FRAME));
             }
         }
