@@ -15,6 +15,7 @@ namespace SnakeApplication
         public FoodManager(Snake snake) 
         {
             CreateFoodType(Food.FoodType.Pizza, 1, snake);
+            CreateFoodType(Food.FoodType.CherryCola, 1, snake);
             CreateFoodType(Food.FoodType.Cookie, 2, snake);
 
             #region Debug Tool

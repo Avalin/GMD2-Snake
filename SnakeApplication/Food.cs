@@ -15,7 +15,7 @@ namespace SnakeApplication
         public enum FoodType
         {
             Pizza,
-            Cheese,
+            CherryCola,
             Cookie
         }
 
@@ -36,8 +36,8 @@ namespace SnakeApplication
                 case FoodType.Pizza:
                     foodImg = Resources.Pizza;
                     break;
-                case FoodType.Cheese:
-                    foodImg = Resources.Cookie;
+                case FoodType.CherryCola:
+                    foodImg = Resources.CherryCola;
                     break;
                 case FoodType.Cookie:
                     foodImg = Resources.Cookie;
