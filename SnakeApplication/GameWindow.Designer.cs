@@ -37,7 +37,7 @@
             this.PB_background.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.PB_background.Location = new System.Drawing.Point(33, 28);
             this.PB_background.Name = "PB_background";
-            this.PB_background.Size = new System.Drawing.Size(704, 512);
+            this.PB_background.Size = new System.Drawing.Size(768, 492);
             this.PB_background.TabIndex = 0;
             this.PB_background.TabStop = false;
             // 
@@ -46,7 +46,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.ClientSize = new System.Drawing.Size(778, 584);
+            this.ClientSize = new System.Drawing.Size(847, 584);
             this.Controls.Add(this.PB_background);
             this.Name = "GameWindow";
             this.Text = "Snake";
