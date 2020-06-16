@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SnakeApplication
 {
-    class SnakeDirection
+    class SnakePartDirection
     {
         Direction currentDirection = Direction.Left;
 

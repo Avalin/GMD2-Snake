@@ -13,7 +13,7 @@ namespace SnakeApplication
         private readonly bool debug = false;
         private Bitmap snakeImgSource;
         private Bitmap snakeImg;
-        private readonly SnakeDirection snakeDirection;
+        private readonly SnakePartDirection snakeDirection;
         public enum PartType
         {
             Head,
@@ -25,11 +25,11 @@ namespace SnakeApplication
         public SnakePart() 
         {
             SetSnakePartType(PartType.Tail);
-            snakeDirection = new SnakeDirection();
+            snakeDirection = new SnakePartDirection();
             SetSnakePartDirection(Direction.Left);
         }
 
-        public SnakeDirection GetSnakeDirection() 
+        public SnakePartDirection GetSnakeDirection() 
         {
             return snakeDirection;
         }

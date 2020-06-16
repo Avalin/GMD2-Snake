@@ -13,9 +13,6 @@ namespace SnakeApplication
         //Update
         private TimeSpan timeBuffer = new TimeSpan(0);
         
-        //Input
-        private readonly List<Keys> input = new List<Keys>();
-        
         //Render
         private Graphics gfx_details = null;
         private Graphics gfx_main = null;
@@ -24,6 +21,7 @@ namespace SnakeApplication
         // GAME MANAGERS
         MapManager mapManager;
         GameStateManager gsm;
+        InputManager im;
 
         public GameWindow()
         {
@@ -44,6 +42,7 @@ namespace SnakeApplication
         {
             mapManager = new MapManager(32, 16, 10);
             gsm = new GameStateManager(GameState.Playing, mapManager);
+            im = new InputManager(gsm);
         }
 
         void InitializeGraphics() 
@@ -67,8 +66,8 @@ namespace SnakeApplication
                 TimeSpan deltaTime = current - previous;
                 previous = current;
                 timeBuffer += deltaTime;
-                ProcessInput();
-                
+                im.ProcessInput();
+
                 //Fixed timestep for logics, varying for rendering
                 while (timeBuffer >= MS_PER_FRAME)
                 {
@@ -88,62 +87,15 @@ namespace SnakeApplication
             return timeBuffer.TotalMilliseconds / MS_PER_FRAME.TotalMilliseconds;
         }
 
-        private void ProcessInput()
-        {
-            if (debug) Console.WriteLine("Processing input...");
-            List<Keys> tempInput = new List<Keys>(input);
-            input.Clear();
-            foreach (Keys key in tempInput)
-            {
-                switch (key)
-                {
-                    case Keys.Space:
-                        if (debug) Console.WriteLine("Space is pressed");
-                        if(GameState.Over != gsm.GetGameState()) gsm.PauseUnpauseGame();
-                        break;
-
-                    case Keys.W:
-                        if(debug) Console.WriteLine("W is pressed");
-                        if(GameState.Over != gsm.GetGameState()) ChangeSnakeDirection(Direction.Up);
-                        break;
-
-                    case Keys.A:
-                        if (debug) Console.WriteLine("A is pressed");
-                        if(GameState.Over != gsm.GetGameState()) ChangeSnakeDirection(Direction.Left);
-                        break;
-
-                    case Keys.S:
-                        if (debug) Console.WriteLine("S is pressed");
-                        if (GameState.Over != gsm.GetGameState()) ChangeSnakeDirection(Direction.Down);
-                        break;
-
-                    case Keys.D:
-                        if (debug) Console.WriteLine("D is pressed");
-                        if (GameState.Over != gsm.GetGameState()) ChangeSnakeDirection(Direction.Right);
-                        break;
-                }
-            }
-        }
-
-        private void ChangeSnakeDirection(Direction newDirection) 
-        {
-            SnakePart snakeHead = gsm.GetSnake().GetSnakeHead();
-            if (newDirection != snakeHead.GetSnakeDirection().GetOppositeDirection())
-            {
-                snakeHead.SetSnakePartDirection(newDirection);
-            }
-        }
-
         private void RenderToScreen(double interpolationAlpha)
         {
             if (debug) Console.WriteLine("Rendering to screen...");
             // Render position = previous position * interpolation alpha + current position * (1 - interpolation alpha)
-            
             ClearDrawSpace();
             Draw();
             Application.DoEvents();
         }
-        void Draw() 
+        private void Draw() 
         {
             gsm.Draw(mapManager, gfx_details);
         }
@@ -164,7 +116,7 @@ namespace SnakeApplication
 
         private void GameWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            input.Add(e.KeyCode);
+            im.AddInput(e);
         }
         #endregion
     }
