@@ -15,7 +15,7 @@ namespace SnakeApplication
         public FoodManager(Snake snake) 
         {
             CreateFoodType(Food.FoodType.Pizza, 1, snake);
-            CreateFoodType(Food.FoodType.Cheese, 1, snake);
+            CreateFoodType(Food.FoodType.Cookie, 2, snake);
 
             #region Debug Tool
             if (debug) 
@@ -36,7 +36,7 @@ namespace SnakeApplication
 
         public Food SpawnFoodOnTile(MapManager mm) 
         {
-            int range = random.Next(foodies.Count() - 1);
+            int range = random.Next(foodies.Count());
             Food foodie = foodies.ElementAt(range);
             mm.PlaceItemOnTile(mm.GetRandomTile(), foodie);
             foodie._IsEaten = false;

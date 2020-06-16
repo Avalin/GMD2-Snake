@@ -37,10 +37,10 @@ namespace SnakeApplication
                     foodImg = Resources.Pizza;
                     break;
                 case FoodType.Cheese:
-                    foodImg = Resources.Pizza;
+                    foodImg = Resources.Cookie;
                     break;
                 case FoodType.Cookie:
-                    foodImg = Resources.Pizza;
+                    foodImg = Resources.Cookie;
                     break;
                 default:
                     foodImg = Resources.Pizza;
