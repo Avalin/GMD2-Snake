@@ -57,6 +57,14 @@ namespace SnakeApplication
                         if (debug) Console.WriteLine("D is pressed");
                         if (GameState.Over != gsm.GetGameState()) ChangeSnakeDirection(Direction.Right);
                         break;
+
+                    case Keys.R:
+                        if (debug) Console.WriteLine("R is pressed");
+                        Program.gw.Hide();
+                        Program.gw = new GameWindow();
+                        Program.gw.Show();
+                        Program.gw.GameLoop();
+                        break;
                 }
             }
         }

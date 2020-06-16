@@ -6,13 +6,15 @@ namespace SnakeApplication
 {
     static class Program
     {
+        public static GameWindow gw;
+
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            GameWindow gw = new GameWindow();
+            gw = new GameWindow();
             gw.Show();
             gw.GameLoop();
         }

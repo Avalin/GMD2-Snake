@@ -119,7 +119,6 @@ namespace SnakeApplication
 
         public Tile GetTileBehindSnakePart(SnakePart snakePart)
         {
-            //SnakePart snakeTail = snake.GetSnakePart(0);
             Direction oppositeOfPartDirection = snakePart.GetSnakeDirection().GetOppositeDirection();
 
             switch (oppositeOfPartDirection)
@@ -143,7 +142,6 @@ namespace SnakeApplication
 
         public Tile GetTileInFrontOfSnakePart(SnakePart snakePart)
         {
-            //SnakePart snakeTail = snake.GetSnakePart(0);
             Direction partDirection = snakePart.GetSnakeDirection().GetCurrentDirection();
 
             switch (partDirection)
