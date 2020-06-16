@@ -7,7 +7,7 @@ namespace SnakeApplication
     public partial class GameWindow : Form
     {
         private readonly bool debug = false;
-        
+
         //Update
         private TimeSpan timeBuffer = new TimeSpan(0);
 

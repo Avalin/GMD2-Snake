@@ -23,31 +23,41 @@ namespace SnakeApplication
 
             for (LinkedListNode<SnakePart> snakePartNode = snakeParts.First; snakePartNode != null;)
             {
-                LinkedListNode<SnakePart> nextNode = snakePartNode.Next;
-                if (nextNode != null)
+                LinkedListNode<SnakePart> nextSnakePartNode = snakePartNode.Next;
+                if (nextSnakePartNode != null)
                 {
-                    Tile nextTile = mm.GetTileWithItem(nextNode.Value);
-                    if (nextTile == null)
-                    {
-                        throw new Exception("nextTile is null");
-                    }
-                    
-                    mm.PlaceItemOnTile(nextTile, snakePartNode.Value);
-                    snakePartNode.Value.SetSnakePartDirection(nextNode.Value.GetSnakeDirection().GetCurrentDirection());
+                    // Move snakePart forward to take the tile of the next snakePart
+                    MoveSnakePartToTileOfNextSnakePart(mm, snakePartNode.Value, nextSnakePartNode.Value);
                 }
                 else 
                 {
                     //Moves snakehead to destination
-                    if (destinationTile == null)
-                    {
-                        throw new Exception("destinationTile is null");
-                    }
-                    mm.PlaceItemOnTile(destinationTile, snakePartNode.Value);
+                    MoveSnakeHeadToDestinationTile(mm, destinationTile, snakePartNode.Value);
                 }
-                snakePartNode = nextNode;
+                snakePartNode = nextSnakePartNode;
             }
             if (ShouldGrow) GrowSnake(mm);
             HandleCollision(mm.GetTileInFrontOfSnakePart(snakeHead.Value));
+        }
+
+        void MoveSnakeHeadToDestinationTile(MapManager mm, Tile destinationTile, SnakePart snakeHead) 
+        {
+            if (destinationTile == null)
+            {
+                throw new Exception("destinationTile is null");
+            }
+            mm.PlaceItemOnTile(destinationTile, snakeHead);
+        }
+
+        void MoveSnakePartToTileOfNextSnakePart(MapManager mm, SnakePart snakePart, SnakePart nextSnakePart) 
+        {
+            Tile nextTile = mm.GetTileWithItem(nextSnakePart);
+            if (nextTile == null)
+            {
+                throw new Exception("nextTile is null");
+            }
+            mm.PlaceItemOnTile(nextTile, snakePart);
+            snakePart.SetSnakePartDirection(nextSnakePart.GetSnakeDirection().GetCurrentDirection());
         }
 
         void HandleCollision(Tile destinationTile) 
