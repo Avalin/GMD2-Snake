@@ -9,12 +9,13 @@ namespace SnakeApplication
     class FoodManager
     {
         bool debug = false;
+        Random random = new Random();
         List<Food> foodies = new List<Food>();
 
-        public FoodManager() 
+        public FoodManager(Snake snake) 
         {
-            CreateFoodType(Food.FoodType.Pizza, 1);
-            CreateFoodType(Food.FoodType.Cheese, 1);
+            CreateFoodType(Food.FoodType.Pizza, 1, snake);
+            CreateFoodType(Food.FoodType.Cheese, 1, snake);
 
             #region Debug Tool
             if (debug) 
@@ -27,18 +28,18 @@ namespace SnakeApplication
             #endregion debug
         }
 
-        void CreateFoodType(Food.FoodType type, int value) 
+        void CreateFoodType(Food.FoodType type, int value, Snake snake) 
         {
-            Food food = new Food(type, value);
+            Food food = new Food(type, value, snake);
             foodies.Add(food);
         }
 
         public Food SpawnFoodOnTile(MapManager mm) 
         {
-            var random = new Random();
             int range = random.Next(foodies.Count() - 1);
             Food foodie = foodies.ElementAt(range);
             mm.PlaceItemOnTile(mm.GetRandomTile(), foodie);
+            foodie._IsEaten = false;
             return foodie;
         }
     }

@@ -16,7 +16,7 @@ namespace SnakeApplication
 
         public Snake(int length)
         {
-            snakeMover = new SnakeMover();
+            snakeMover = new SnakeMover(this);
             snakeParts = new LinkedList<SnakePart>();
 
             for (int i = 0; i < length; i++) 
@@ -60,7 +60,7 @@ namespace SnakeApplication
         public void EatFood(Food food) 
         {
             GameStateManager.AddPointsToScore(food._Value);
-            AddSnakePart();
+            snakeMover._ShouldGrow = true;
 
             #region Debug Tools
             if (debug) 
@@ -75,19 +75,16 @@ namespace SnakeApplication
         {
             SnakePart snakeTail = snakeParts.First();
             mm.PlaceItemOnTile(mm.GetCenterTile(), snakeTail);
-            Tile currentTile;
 
-            for (LinkedListNode<SnakePart> spNode = snakeParts.First; spNode != null;) 
+            for (LinkedListNode<SnakePart> currentNode = snakeParts.First; currentNode != null;) 
             {
-                LinkedListNode<SnakePart> nextNode = spNode.Next;
-                currentTile = mm.GetTileWithItem(spNode.Value);
+                LinkedListNode<SnakePart> nextNode = currentNode.Next;
                 if (nextNode != null) 
                 {
-                    Tile tile = mm.FindLeftNeighbourToTile(currentTile);
-                    if(tile == null) { throw new Exception("unable to find left neighbour tile"); }
+                    Tile tile = mm.GetTileInFrontOfSnakePart(currentNode.Value);
                     mm.PlaceItemOnTile(tile, nextNode.Value);
                 }
-                spNode = nextNode;
+                currentNode = nextNode;
             }
         }
 

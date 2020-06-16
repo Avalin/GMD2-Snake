@@ -40,22 +40,22 @@ namespace SnakeApplication
             {
                 case SnakeDirection.Direction.Up:
                     if (debug) Console.WriteLine("Direction is upwards");
-                    snakeImg.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                    //snakeImg.RotateFlip(RotateFlipType.Rotate90FlipNone);
                     break;
 
                 case SnakeDirection.Direction.Down:
                     if (debug) Console.WriteLine("Direction is downwards");
-                    snakeImg.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                    //snakeImg.RotateFlip(RotateFlipType.Rotate270FlipNone);
                     break;
 
                 case SnakeDirection.Direction.Left:
                     if (debug) Console.WriteLine("Direction is left");
-                    snakeImg.RotateFlip(RotateFlipType.RotateNoneFlipNone);
+                    //snakeImg.RotateFlip(RotateFlipType.RotateNoneFlipNone);
                     break;
 
                 case SnakeDirection.Direction.Right:
                     if (debug) Console.WriteLine("Direction is right");
-                    snakeImg.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                    //snakeImg.RotateFlip(RotateFlipType.Rotate180FlipNone);
                     break;
             }
         }
@@ -75,6 +75,7 @@ namespace SnakeApplication
 
         public override void OnCollision()
         {
+            Console.WriteLine("GAME ENDED.");
             GameStateManager.EndGame();
         }
 
@@ -100,11 +101,7 @@ namespace SnakeApplication
         public void Draw(MapManager mm, Graphics gfx)
         {
             Tile tile = mm.GetTileWithItem(this);
-            if (tile == null)
-            {
-                throw new Exception("unable to find tile for snake part");
-            }
-            else
+            if (tile != null)
             {
                 gfx.DrawImage(snakeImg, tile.X * mm.GetTileSize(), tile.Y * mm.GetTileSize(), snakeImg.Width, snakeImg.Height);
             }

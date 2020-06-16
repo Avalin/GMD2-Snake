@@ -9,6 +9,7 @@ namespace SnakeApplication
     class MapManager
     {
         private readonly bool debug = false;
+        Random random = new Random();
 
         private int tileSize;
         private int mapSizeX;
@@ -68,13 +69,17 @@ namespace SnakeApplication
 
         public Tile GetRandomTile() 
         {
-            var random = new Random();
-            int range = random.Next(tiles.Count()-1);
-            Tile randomTile = tiles.ElementAt(range);
+            List<Tile> availableTiles = new List<Tile>();
+            for (LinkedListNode<Tile> t = tiles.First; t != null; t = t.Next) 
+            {
+                if (t.Value.Item == null) 
+                {
+                    availableTiles.Add(t.Value);
+                }
+            }
 
-            //If tile already holds something, find another
-            if (randomTile.Item != null) GetRandomTile();
-            return randomTile;
+            int range = random.Next(availableTiles.Count() - 1);
+            return availableTiles.ElementAt(range);
         }
 
         public Tile GetTileAtPosition(int x, int y)
@@ -102,6 +107,64 @@ namespace SnakeApplication
             return null;
         }
 
+        public void ClearTile(Tile tile)
+        {
+            tile.Item = null;
+        }
+
+        public void RemoveItemFromMap(TileItem item)
+        {
+            GetTileWithItem(item).Item = null;
+        }
+
+        public Tile GetTileBehindSnakePart(SnakePart snakePart)
+        {
+            //SnakePart snakeTail = snake.GetSnakePart(0);
+            SnakeDirection.Direction oppositeOfPartDirection = snakePart.GetSnakeDirection().GetOppositeDirection();
+
+            switch (oppositeOfPartDirection)
+            {
+                case SnakeDirection.Direction.Up:
+                    return FindUpwardsNeighbourToTile(GetTileWithItem(snakePart));
+
+                case SnakeDirection.Direction.Down:
+                    return FindDownwardsNeighbourToTile(GetTileWithItem(snakePart));
+
+                case SnakeDirection.Direction.Left:
+                    return FindLeftNeighbourToTile(GetTileWithItem(snakePart));
+
+                case SnakeDirection.Direction.Right:
+                    return FindRightNeighbourToTile(GetTileWithItem(snakePart));
+
+                default:
+                    return FindRightNeighbourToTile(GetTileWithItem(snakePart));
+            }
+        }
+
+        public Tile GetTileInFrontOfSnakePart(SnakePart snakePart)
+        {
+            //SnakePart snakeTail = snake.GetSnakePart(0);
+            SnakeDirection.Direction partDirection = snakePart.GetSnakeDirection().GetCurrentDirection();
+
+            switch (partDirection)
+            {
+                case SnakeDirection.Direction.Up:
+                    return FindUpwardsNeighbourToTile(GetTileWithItem(snakePart));
+
+                case SnakeDirection.Direction.Down:
+                    return FindDownwardsNeighbourToTile(GetTileWithItem(snakePart));
+
+                case SnakeDirection.Direction.Left:
+                    return FindLeftNeighbourToTile(GetTileWithItem(snakePart));
+
+                case SnakeDirection.Direction.Right:
+                    return FindRightNeighbourToTile(GetTileWithItem(snakePart));
+
+                default:
+                    return FindRightNeighbourToTile(GetTileWithItem(snakePart));
+            }
+        }
+
         public void PlaceItemOnTile(Tile tile, TileItem item)
         {
             for (LinkedListNode<Tile> tileNode = tiles.First; tileNode != null;)
@@ -122,28 +185,28 @@ namespace SnakeApplication
         public Tile FindLeftNeighbourToTile(Tile myTile)
         {
             //Avoid out of range and move to the other side
-            int x = mod(myTile.X - 1, mapSizeX);
+            int x = Program.mod(myTile.X - 1, mapSizeX);
             return GetTileAtPosition(x, myTile.Y);
         }
 
         public Tile FindRightNeighbourToTile(Tile myTile)
         {
             //Avoid out of range and move to the other side
-            int x = mod(myTile.X + 1, mapSizeX);
+            int x = Program.mod(myTile.X + 1, mapSizeX);
             return GetTileAtPosition(x, myTile.Y);
         }
 
         public Tile FindDownwardsNeighbourToTile(Tile myTile)
         {
             //Avoid out of range and move to the other side
-            int y = mod(myTile.Y + 1, mapSizeY);
+            int y = Program.mod(myTile.Y + 1, mapSizeY);
             return GetTileAtPosition(myTile.X, y);
         }
 
         public Tile FindUpwardsNeighbourToTile(Tile myTile)
         {
             //Avoid out of range and move to the other side
-            int y = mod(myTile.Y - 1, mapSizeY);
+            int y = Program.mod(myTile.Y - 1, mapSizeY);
             return GetTileAtPosition(myTile.X, y);
         }
         #endregion
@@ -194,12 +257,6 @@ namespace SnakeApplication
         public int[] GetMapSize()
         {
             return new int[]{ mapSizeX, mapSizeY };
-        }
-
-        // Standard Modulus Operator
-        int mod(int x, int m)
-        {
-            return (x % m + m) % m;
         }
     }
 }

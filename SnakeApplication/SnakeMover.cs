@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SnakeApplication
 {
     class SnakeMover
     {
+        Snake snake;
+
+        public SnakeMover(Snake snake) 
+        {
+            this.snake = snake;
+        }
+
+        public bool _ShouldGrow { get; set; }
+
         public void MoveSnakeParts(LinkedList<SnakePart> snakeParts, MapManager mm) 
         {
             LinkedListNode<SnakePart> snakeHead = snakeParts.Last;
-            Tile destinationTile = FindDestinationTile(mm, snakeHead.Value);
+            Tile destinationTile = mm.GetTileInFrontOfSnakePart(snakeHead.Value);
             Tile currentTile = mm.GetTileWithItem(snakeParts.First.Value);
             mm.PlaceItemOnTile(currentTile, null);
 
@@ -27,6 +33,7 @@ namespace SnakeApplication
                     }
                     
                     mm.PlaceItemOnTile(nextTile, snakePartNode.Value);
+                    snakePartNode.Value.SetSnakePartDirection(nextNode.Value.GetSnakeDirection().GetCurrentDirection());
                 }
                 else 
                 {
@@ -39,27 +46,21 @@ namespace SnakeApplication
                 }
                 snakePartNode = nextNode;
             }
+            if (_ShouldGrow) GrowSnake(mm);
+            HandleCollision(mm.GetTileInFrontOfSnakePart(snakeHead.Value));
         }
 
-        Tile FindDestinationTile(MapManager mm, SnakePart snakeHead) 
+        void HandleCollision(Tile destinationTile) 
         {
-            switch (snakeHead.GetSnakeDirection().GetCurrentDirection()) 
-            {
-                case SnakeDirection.Direction.Up:
-                    return mm.FindUpwardsNeighbourToTile(mm.GetTileWithItem(snakeHead));
+            if(destinationTile.Item != null)
+            destinationTile.Item.OnCollision();
+        }
 
-                case SnakeDirection.Direction.Down:
-                    return mm.FindDownwardsNeighbourToTile(mm.GetTileWithItem(snakeHead));
-
-                case SnakeDirection.Direction.Left:
-                    return mm.FindLeftNeighbourToTile(mm.GetTileWithItem(snakeHead));
-
-                case SnakeDirection.Direction.Right:
-                    return mm.FindRightNeighbourToTile(mm.GetTileWithItem(snakeHead));
-
-                default:
-                    return mm.FindLeftNeighbourToTile(mm.GetTileWithItem(snakeHead));
-            }
+        void GrowSnake(MapManager mm) 
+        {
+            snake.AddSnakePart();
+            mm.PlaceItemOnTile(mm.GetTileBehindSnakePart(snake.GetSnakePart(1)), snake.GetSnakePart(0));
+            _ShouldGrow = false;
         }
     }
 }

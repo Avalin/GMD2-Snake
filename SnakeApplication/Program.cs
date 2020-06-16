@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SnakeApplication
@@ -17,6 +14,12 @@ namespace SnakeApplication
             GameWindow gw = new GameWindow();
             gw.Show();
             gw.GameLoop();
+        }
+
+        // Standard Modulus Operator
+        public static int mod(int x, int m)
+        {
+            return (x % m + m) % m;
         }
     }
 }

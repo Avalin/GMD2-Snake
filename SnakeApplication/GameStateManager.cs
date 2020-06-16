@@ -9,6 +9,10 @@ namespace SnakeApplication
     class GameStateManager
     {
         static int score = 0;
+        MapManager mm;
+        FoodManager fm;
+        Snake snake;
+        Food food;
         public enum GameState
         {
             Playing,
@@ -17,9 +21,38 @@ namespace SnakeApplication
         }
         static GameState currentGameState;
 
-        public GameStateManager(GameState currentState) 
+        public GameStateManager(GameState currentState, MapManager mm)
         {
             currentGameState = currentState;
+            this.mm = mm;
+            snake = new Snake(4);
+            snake.AddSnakeToMap(mm);
+            this.fm = new FoodManager(snake);
+            food = fm.SpawnFoodOnTile(mm);
+        }
+
+        public Snake GetSnake() 
+        {
+            return snake;
+        }
+
+        public Food GetFood()
+        {
+            RefreshFood();
+            return food;
+        }
+
+        public void RefreshFood() 
+        {
+            if (food._IsEaten)
+            {
+                food = fm.SpawnFoodOnTile(mm);
+            }
+        }
+
+        public FoodManager GetFoodManager()
+        {
+            return fm;
         }
 
         public static void AddPointsToScore(int points) 

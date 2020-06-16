@@ -8,7 +8,7 @@ namespace SnakeApplication
 {
     public partial class GameWindow : Form
     {
-        private bool debug = true;
+        private bool debug = false;
         
         //Update
         private TimeSpan timeBuffer = new TimeSpan(0);
@@ -17,44 +17,33 @@ namespace SnakeApplication
         private readonly List<Keys> input = new List<Keys>();
         
         //Render
-        private List<Drawable> drawables = new List<Drawable>();
         private Graphics gfx_details = null;
         private Graphics gfx_main = null;
         private Image img = null;
 
         // GAME MANAGERS
-        FoodManager foodManager;
         MapManager mapManager;
         GameStateManager gsm;
-
-        //Game Items
-        Snake snake;
-        Food food;
-
 
         public GameWindow()
         {
             InitializeComponent();
             GameManagers();
             InitializeGraphics();
-
-            snake = new Snake(4);
-            snake.AddSnakeToMap(mapManager);
-            food = foodManager.SpawnFoodOnTile(mapManager);
         }
 
         void ClearDrawSpace()
         {
             int[] xy = mapManager.GetMapSize();
             int tileSize = mapManager.GetTileSize();
+            gfx_main.DrawImage(img, 0, 0);
             gfx_details.FillRectangle(new SolidBrush(Color.LightBlue), 0, 0, tileSize * xy[0], tileSize * xy[1]);
         }
 
         void GameManagers()
         {
-            gsm = new GameStateManager(GameStateManager.GameState.Playing);
-            foodManager = new FoodManager();
             mapManager = new MapManager(32, 16, 10);
+            gsm = new GameStateManager(GameStateManager.GameState.Playing, mapManager);
         }
 
         void InitializeGraphics() 
@@ -72,7 +61,7 @@ namespace SnakeApplication
             TimeSpan MS_PER_FRAME = TimeSpan.FromMilliseconds(1.0 / 60.0 * 10000.0);
             Stopwatch stopwatch = Stopwatch.StartNew();
             TimeSpan previous = stopwatch.Elapsed;
-            while (gsm.GetGameState() != GameStateManager.GameState.Over)
+            while (true)
             {
                 TimeSpan current = stopwatch.Elapsed;
                 TimeSpan deltaTime = current - previous;
@@ -83,7 +72,10 @@ namespace SnakeApplication
                 //Fixed timestep for logics, varying for rendering
                 while (timeBuffer >= MS_PER_FRAME)
                 {
-                    UpdateGameLogic();
+                    if (gsm.GetGameState() == GameStateManager.GameState.Playing)
+                    {
+                        UpdateGameLogic();
+                    }
                     timeBuffer -= MS_PER_FRAME;
                 }
                 RenderToScreen(CalculateInterpolationAlpha(timeBuffer, MS_PER_FRAME));
@@ -112,32 +104,33 @@ namespace SnakeApplication
 
                     case Keys.W:
                         if(debug) Console.WriteLine("W is pressed");
-                        ChangeSnakeDirection(SnakeDirection.Direction.Up, SnakeDirection.Direction.Down);
+                        ChangeSnakeDirection(SnakeDirection.Direction.Up);
                         break;
 
                     case Keys.A:
                         if (debug) Console.WriteLine("A is pressed");
-                        ChangeSnakeDirection(SnakeDirection.Direction.Left, SnakeDirection.Direction.Right);
+                        ChangeSnakeDirection(SnakeDirection.Direction.Left);
                         break;
 
                     case Keys.S:
                         if (debug) Console.WriteLine("S is pressed");
-                        ChangeSnakeDirection(SnakeDirection.Direction.Down, SnakeDirection.Direction.Up);
+                        ChangeSnakeDirection(SnakeDirection.Direction.Down);
                         break;
 
                     case Keys.D:
                         if (debug) Console.WriteLine("D is pressed");
-                        ChangeSnakeDirection(SnakeDirection.Direction.Right, SnakeDirection.Direction.Left);
+                        ChangeSnakeDirection(SnakeDirection.Direction.Right);
                         break;
                 }
             }
         }
 
-        private void ChangeSnakeDirection(SnakeDirection.Direction newDirection, SnakeDirection.Direction oppositeDirection) 
+        private void ChangeSnakeDirection(SnakeDirection.Direction newDirection) 
         {
-            if (snake.GetSnakeHead().GetSnakeDirection().GetCurrentDirection() != oppositeDirection)
+            SnakeDirection sd = gsm.GetSnake().GetSnakeHead().GetSnakeDirection();
+            if (newDirection != sd.GetOppositeDirection())
             {
-                snake.GetSnakeHead().GetSnakeDirection().SetCurrentDirection(newDirection);
+                sd.SetCurrentDirection(newDirection);
             }
         }
 
@@ -145,23 +138,21 @@ namespace SnakeApplication
         {
             if (debug) Console.WriteLine("Rendering to screen...");
             // Render position = previous position * interpolation alpha + current position * (1 - interpolation alpha)
+            
             ClearDrawSpace();
-
             DrawDrawables();
-            gfx_main.DrawImage(img, 0, 0);
             Application.DoEvents();
         }
         void DrawDrawables() 
         {
-            //gfx_details.DrawImage(Properties.Resources.SnakeBody, 0, 0, 32, 32);
-            snake.Draw(mapManager, gfx_details);
-            food.Draw(mapManager, gfx_details);
+            gsm.GetSnake().Draw(mapManager, gfx_details);
+            gsm.GetFood().Draw(mapManager, gfx_details);
         }
 
         private void UpdateGameLogic()
         {
             if (debug) Console.WriteLine("Updating game logic...");
-            snake.Update(mapManager);
+            gsm.GetSnake().Update(mapManager);
         }
         #endregion
 

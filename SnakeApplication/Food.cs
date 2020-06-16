@@ -1,14 +1,17 @@
 ﻿using SnakeApplication.Properties;
+using System;
 using System.Drawing;
 
 namespace SnakeApplication
 {
     class Food : TileItem, Drawable
     {
-        private Image foodImg;
         public int _Value { get; set; }
         public FoodType _FoodType { get; set; }
+        public bool _IsEaten { get; set; }
 
+        private Image foodImg;
+        private Snake snake;
         public enum FoodType
         {
             Pizza,
@@ -17,10 +20,12 @@ namespace SnakeApplication
         }
 
 
-        public Food(FoodType foodType, int value) 
+        public Food(FoodType foodType, int value, Snake snake) 
         {
             _FoodType = foodType;
             _Value = value;
+            _IsEaten = false;
+            this.snake = snake;
             AssignImage();
         }
 
@@ -45,13 +50,21 @@ namespace SnakeApplication
 
         public void Draw(MapManager mm, Graphics gfx)
         {
-            Tile tile = mm.GetTileWithItem(this);
-            gfx.DrawImage(foodImg, tile.X* mm.GetTileSize(), tile.Y* mm.GetTileSize(), mm.GetTileSize(), mm.GetTileSize());
+            if (!_IsEaten) 
+            {
+                Tile tile = mm.GetTileWithItem(this);
+                if (tile != null) gfx.DrawImage(foodImg, tile.X * mm.GetTileSize(), tile.Y * mm.GetTileSize(), mm.GetTileSize(), mm.GetTileSize());
+                else _IsEaten = true;
+            }
         }
 
         public override void OnCollision()
         {
-
+            if (!_IsEaten) 
+            {
+                snake.EatFood(this);
+                _IsEaten = true;
+            }
         }
     }
 }
