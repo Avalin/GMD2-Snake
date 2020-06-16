@@ -7,26 +7,21 @@ namespace SnakeApplication
 {
     public partial class GameWindow : Form
     {
-        private bool debug = false;
+        private readonly bool debug = false;
         
         //Update
         private TimeSpan timeBuffer = new TimeSpan(0);
-        
-        //Render
-        private Graphics gfx_details = null;
-        private Graphics gfx_main = null;
-        private Image bitmap = null;
 
         // MANAGERS
         MapManager mapManager;
         GameStateManager gameStateManager;
         InputManager inputManager;
+        RenderManager renderManager;
 
         public GameWindow()
         {
             InitializeComponent();
             InitializeManagers();
-            InitializeGraphics();
         }
 
         void InitializeManagers()
@@ -34,23 +29,7 @@ namespace SnakeApplication
             mapManager = new MapManager(32, 16, 10);
             gameStateManager = new GameStateManager(GameState.Playing, mapManager);
             inputManager = new InputManager(gameStateManager);
-        }
-
-        void InitializeGraphics() 
-        {
-            bitmap = new Bitmap(
-                mapManager.GetTileSize() * mapManager.GetMapSize()[0],
-                mapManager.GetTileSize() * mapManager.GetMapSize()[1]);
-            gfx_main = PB_background.CreateGraphics();
-            gfx_details = Graphics.FromImage(bitmap);
-        }
-
-        void ClearDrawSpace()
-        {
-            int[] xy = mapManager.GetMapSize();
-            int tileSize = mapManager.GetTileSize();
-            gfx_main.DrawImage(bitmap, 0, 0);
-            gfx_details.FillRectangle(new SolidBrush(Color.LightBlue), 0, 0, tileSize * xy[0], tileSize * xy[1]);
+            renderManager = new RenderManager(gameStateManager, mapManager, PB_background.CreateGraphics());
         }
 
         #region Game Loop Methods
@@ -76,7 +55,7 @@ namespace SnakeApplication
                     }
                     timeBuffer -= MS_PER_FRAME;
                 }
-                RenderToScreen(CalculateInterpolationAlpha(timeBuffer, MS_PER_FRAME));
+                renderManager.RenderToScreen(CalculateInterpolationAlpha(timeBuffer, MS_PER_FRAME));
             }
         }
 
@@ -84,19 +63,6 @@ namespace SnakeApplication
         {
             //To avoid choppy rendering
             return timeBuffer.TotalMilliseconds / MS_PER_FRAME.TotalMilliseconds;
-        }
-
-        private void RenderToScreen(double interpolationAlpha)
-        {
-            if (debug) Console.WriteLine("Rendering to screen...");
-            // Render position = previous position * interpolation alpha + current position * (1 - interpolation alpha)
-            ClearDrawSpace();
-            Draw();
-            Application.DoEvents();
-        }
-        private void Draw() 
-        {
-            gameStateManager.Draw(mapManager, gfx_details);
         }
 
         private void UpdateGameLogic()
