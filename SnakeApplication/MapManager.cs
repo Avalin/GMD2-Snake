@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SnakeApplication
 {
     class MapManager
     {
         private readonly bool debug = false;
-        Random random = new Random();
+        private Random random = new Random();
 
         private int tileSize;
         private int mapSizeX;

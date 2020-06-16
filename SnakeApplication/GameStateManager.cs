@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace SnakeApplication
 {
@@ -61,7 +56,7 @@ namespace SnakeApplication
 
         public void RefreshFood() 
         {
-            if (food._IsEaten)
+            if (food.MIsEaten)
             {
                 food = fm.SpawnFoodOnTile(mm);
             }

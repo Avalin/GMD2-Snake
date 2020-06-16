@@ -5,14 +5,14 @@ namespace SnakeApplication
 {
     class SnakeMover
     {
-        Snake snake;
+        readonly Snake snake;
 
         public SnakeMover(Snake snake) 
         {
             this.snake = snake;
         }
 
-        public bool _ShouldGrow { get; set; }
+        public bool ShouldGrow { get; set; }
 
         public void MoveSnakeParts(LinkedList<SnakePart> snakeParts, MapManager mm) 
         {
@@ -46,7 +46,7 @@ namespace SnakeApplication
                 }
                 snakePartNode = nextNode;
             }
-            if (_ShouldGrow) GrowSnake(mm);
+            if (ShouldGrow) GrowSnake(mm);
             HandleCollision(mm.GetTileInFrontOfSnakePart(snakeHead.Value));
         }
 
@@ -60,7 +60,7 @@ namespace SnakeApplication
         {
             snake.AddSnakePart();
             mm.PlaceItemOnTile(mm.GetTileBehindSnakePart(snake.GetSnakePart(1)), snake.GetSnakePart(0));
-            _ShouldGrow = false;
+            ShouldGrow = false;
         }
     }
 }

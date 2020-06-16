@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Direction.cs" />
-    <Compile Include="Drawable.cs" />
+    <Compile Include="IDrawable.cs" />
     <Compile Include="Food.cs" />
     <Compile Include="FoodManager.cs" />
     <Compile Include="GameState.cs" />
@@ -67,6 +67,7 @@
     <Compile Include="SnakePartDirection.cs" />
     <Compile Include="SnakeMover.cs" />
     <Compile Include="SnakePart.cs" />
+    <Compile Include="SnakePartType.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="TileItem.cs" />
     <EmbeddedResource Include="GameWindow.resx">

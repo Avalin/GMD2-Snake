@@ -2,7 +2,7 @@
 
 namespace SnakeApplication
 {
-    interface Drawable
+    interface IDrawable
     {
         void Draw(MapManager mm, Graphics gfx);
     }

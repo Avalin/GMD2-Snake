@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SnakeApplication
@@ -10,6 +7,7 @@ namespace SnakeApplication
     class InputManager
     {
         private readonly bool debug = false;
+
         private readonly GameStateManager gsm;
         private readonly List<Keys> input;
 

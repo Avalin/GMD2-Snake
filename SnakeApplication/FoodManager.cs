@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SnakeApplication
 {
@@ -23,7 +21,7 @@ namespace SnakeApplication
             {
                 foreach (Food food in foodies) 
                 {
-                    Console.WriteLine(food._FoodType + " is created with value " + food._Value + ".");
+                    Console.WriteLine(food.MFoodType + " is created with value " + food.MValue + ".");
                 }
             }
             #endregion debug
@@ -40,7 +38,7 @@ namespace SnakeApplication
             int range = random.Next(foodies.Count());
             Food foodie = foodies.ElementAt(range);
             mm.PlaceItemOnTile(mm.GetRandomTile(), foodie);
-            foodie._IsEaten = false;
+            foodie.MIsEaten = false;
             return foodie;
         }
     }

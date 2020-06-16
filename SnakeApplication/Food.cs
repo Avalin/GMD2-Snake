@@ -1,14 +1,13 @@
 ﻿using SnakeApplication.Properties;
-using System;
 using System.Drawing;
 
 namespace SnakeApplication
 {
-    class Food : TileItem, Drawable
+    class Food : TileItem, IDrawable
     {
-        public int _Value { get; set; }
-        public FoodType _FoodType { get; set; }
-        public bool _IsEaten { get; set; }
+        public int MValue { get; set; }
+        public FoodType MFoodType { get; set; }
+        public bool MIsEaten { get; set; }
 
         private Image foodImg;
         private Snake snake;
@@ -22,16 +21,16 @@ namespace SnakeApplication
 
         public Food(FoodType foodType, int value, Snake snake) 
         {
-            _FoodType = foodType;
-            _Value = value;
-            _IsEaten = false;
+            MFoodType = foodType;
+            MValue = value;
+            MIsEaten = false;
             this.snake = snake;
             AssignImage();
         }
 
         private void AssignImage() 
         {
-            switch (_FoodType)
+            switch (MFoodType)
             {
                 case FoodType.Pizza:
                     foodImg = Resources.Pizza;
@@ -50,20 +49,20 @@ namespace SnakeApplication
 
         public void Draw(MapManager mm, Graphics gfx)
         {
-            if (!_IsEaten) 
+            if (!MIsEaten) 
             {
                 Tile tile = mm.GetTileWithItem(this);
                 if (tile != null) gfx.DrawImage(foodImg, tile.X * mm.GetTileSize(), tile.Y * mm.GetTileSize(), mm.GetTileSize(), mm.GetTileSize());
-                else _IsEaten = true;
+                else MIsEaten = true;
             }
         }
 
         public override void OnCollision()
         {
-            if (!_IsEaten) 
+            if (!MIsEaten) 
             {
                 snake.EatFood(this);
-                _IsEaten = true;
+                MIsEaten = true;
             }
         }
     }

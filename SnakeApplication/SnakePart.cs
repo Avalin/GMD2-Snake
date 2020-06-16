@@ -4,23 +4,17 @@ using System.Drawing;
 
 namespace SnakeApplication
 {
-    class SnakePart : TileItem, Drawable
+    class SnakePart : TileItem, IDrawable
     {
         private readonly bool debug = false;
         private Bitmap snakeImgSource;
         private Bitmap snakeImg;
         private readonly SnakePartDirection snakeDirection;
-        public enum PartType
-        {
-            Head,
-            Body,
-            Tail
-        }
-        PartType currentPartType;
+        SnakePartType currentPartType;
 
         public SnakePart() 
         {
-            SetSnakePartType(PartType.Tail);
+            SetSnakePartType(SnakePartType.Tail);
             snakeDirection = new SnakePartDirection();
             SetSnakePartDirection(Direction.Left);
         }
@@ -58,13 +52,13 @@ namespace SnakeApplication
             }
         }
 
-        public void SetSnakePartType(PartType type) 
+        public void SetSnakePartType(SnakePartType type) 
         {
             currentPartType = type;
             AssignImage();
         }
 
-        public PartType GetSnakePartType() 
+        public SnakePartType GetSnakePartType() 
         {
             return currentPartType;
         }
@@ -79,15 +73,15 @@ namespace SnakeApplication
         {
             switch (currentPartType) 
             {
-                case PartType.Head:
+                case SnakePartType.Head:
                     snakeImgSource = Resources.SnakeHead;
                     snakeImg = Resources.SnakeHead;
                     break;
-                case PartType.Body:
+                case SnakePartType.Body:
                     snakeImgSource = Resources.SnakeBody;
                     snakeImg = Resources.SnakeBody;
                     break;
-                case PartType.Tail:
+                case SnakePartType.Tail:
                     snakeImgSource = Resources.SnakeTail;
                     snakeImg = Resources.SnakeTail;
                     break;

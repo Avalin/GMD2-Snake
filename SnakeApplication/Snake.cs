@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SnakeApplication
 {
-    class Snake : Drawable
+    class Snake : IDrawable
     {
         private readonly bool debug = true;
         private readonly SnakeMover snakeMover;
@@ -45,27 +43,27 @@ namespace SnakeApplication
             if (snakeParts.Count() == 0)
             {
                 snakeParts.AddFirst(new SnakePart());
-                snakeParts.First.Value.SetSnakePartType(SnakePart.PartType.Head);
+                snakeParts.First.Value.SetSnakePartType(SnakePartType.Head);
             }
             else 
             {
                 snakeParts.AddFirst(new SnakePart());
-                if (snakeParts.First.Next.Value.GetSnakePartType() == SnakePart.PartType.Tail) 
+                if (snakeParts.First.Next.Value.GetSnakePartType() == SnakePartType.Tail) 
                 {
-                    snakeParts.First.Next.Value.SetSnakePartType(SnakePart.PartType.Body);
+                    snakeParts.First.Next.Value.SetSnakePartType(SnakePartType.Body);
                 }
             }
         }
 
         public void EatFood(Food food) 
         {
-            GameStateManager.AddPointsToScore(food._Value);
-            snakeMover._ShouldGrow = true;
+            GameStateManager.AddPointsToScore(food.MValue);
+            snakeMover.ShouldGrow = true;
 
             #region Debug Tools
             if (debug) 
             {
-                Console.WriteLine("Snake ate " + food._FoodType + " for a value of " + food._Value + ".");
+                Console.WriteLine("Snake ate " + food.MFoodType + " for a value of " + food.MValue + ".");
                 Console.WriteLine("Snake now has a score of " + GameStateManager.GetScore() + " and a length of " + snakeParts.Count() + ".");
             }
             #endregion Debug Tools
