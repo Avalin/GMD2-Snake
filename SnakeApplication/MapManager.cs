@@ -120,20 +120,20 @@ namespace SnakeApplication
         public Tile GetTileBehindSnakePart(SnakePart snakePart)
         {
             //SnakePart snakeTail = snake.GetSnakePart(0);
-            SnakeDirection.Direction oppositeOfPartDirection = snakePart.GetSnakeDirection().GetOppositeDirection();
+            Direction oppositeOfPartDirection = snakePart.GetSnakeDirection().GetOppositeDirection();
 
             switch (oppositeOfPartDirection)
             {
-                case SnakeDirection.Direction.Up:
+                case Direction.Up:
                     return FindUpwardsNeighbourToTile(GetTileWithItem(snakePart));
 
-                case SnakeDirection.Direction.Down:
+                case Direction.Down:
                     return FindDownwardsNeighbourToTile(GetTileWithItem(snakePart));
 
-                case SnakeDirection.Direction.Left:
+                case Direction.Left:
                     return FindLeftNeighbourToTile(GetTileWithItem(snakePart));
 
-                case SnakeDirection.Direction.Right:
+                case Direction.Right:
                     return FindRightNeighbourToTile(GetTileWithItem(snakePart));
 
                 default:
@@ -144,20 +144,20 @@ namespace SnakeApplication
         public Tile GetTileInFrontOfSnakePart(SnakePart snakePart)
         {
             //SnakePart snakeTail = snake.GetSnakePart(0);
-            SnakeDirection.Direction partDirection = snakePart.GetSnakeDirection().GetCurrentDirection();
+            Direction partDirection = snakePart.GetSnakeDirection().GetCurrentDirection();
 
             switch (partDirection)
             {
-                case SnakeDirection.Direction.Up:
+                case Direction.Up:
                     return FindUpwardsNeighbourToTile(GetTileWithItem(snakePart));
 
-                case SnakeDirection.Direction.Down:
+                case Direction.Down:
                     return FindDownwardsNeighbourToTile(GetTileWithItem(snakePart));
 
-                case SnakeDirection.Direction.Left:
+                case Direction.Left:
                     return FindLeftNeighbourToTile(GetTileWithItem(snakePart));
 
-                case SnakeDirection.Direction.Right:
+                case Direction.Right:
                     return FindRightNeighbourToTile(GetTileWithItem(snakePart));
 
                 default:

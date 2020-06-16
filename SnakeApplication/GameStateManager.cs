@@ -14,12 +14,6 @@ namespace SnakeApplication
         FoodManager fm;
         Snake snake;
         Food food;
-        public enum GameState
-        {
-            Playing,
-            Pausing,
-            Over
-        }
         static GameState currentGameState;
 
         public GameStateManager(GameState currentState, MapManager mm)
@@ -36,6 +30,23 @@ namespace SnakeApplication
         {
             GetSnake().Draw(mm, gfx);
             GetFood().Draw(mm, gfx);
+            DrawUI(mm, gfx);
+        }
+
+        private void DrawUI(MapManager mm, Graphics gfx)
+        {
+            Tile center = mm.GetCenterTile();
+            int tileSize = mm.GetTileSize();
+            gfx.DrawString("Food eaten: " + score.ToString(), new Font("Arial", 10), new SolidBrush(Color.Black), center.X * tileSize, 0);
+            if (GetGameState() == GameState.Over)
+            {
+                gfx.DrawString("GAME OVER", new Font("Arial", 20), new SolidBrush(Color.Black), center.X*tileSize, center.Y * tileSize);
+            }
+
+            if (GetGameState() == GameState.Pausing)
+            {
+                gfx.DrawString("PAUSED", new Font("Arial", 20), new SolidBrush(Color.Black), center.X * tileSize, center.Y * tileSize);
+            }
         }
 
         public Snake GetSnake() 
@@ -45,7 +56,6 @@ namespace SnakeApplication
 
         public Food GetFood()
         {
-            RefreshFood();
             return food;
         }
 
@@ -84,7 +94,7 @@ namespace SnakeApplication
 
         public static void EndGame()
         {
-            currentGameState = GameStateManager.GameState.Over;
+            currentGameState = GameState.Over;
         }
 
         public void PauseUnpauseGame() 

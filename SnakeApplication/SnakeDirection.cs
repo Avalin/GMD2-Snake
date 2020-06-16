@@ -8,13 +8,6 @@ namespace SnakeApplication
 {
     class SnakeDirection
     {
-        public enum Direction
-        {
-            Up,
-            Down,
-            Left,
-            Right,
-        }
         Direction currentDirection = Direction.Left;
 
         public Direction GetCurrentDirection() 

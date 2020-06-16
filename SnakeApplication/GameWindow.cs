@@ -43,7 +43,7 @@ namespace SnakeApplication
         void InitializeManagers()
         {
             mapManager = new MapManager(32, 16, 10);
-            gsm = new GameStateManager(GameStateManager.GameState.Playing, mapManager);
+            gsm = new GameStateManager(GameState.Playing, mapManager);
         }
 
         void InitializeGraphics() 
@@ -72,7 +72,7 @@ namespace SnakeApplication
                 //Fixed timestep for logics, varying for rendering
                 while (timeBuffer >= MS_PER_FRAME)
                 {
-                    if (gsm.GetGameState() == GameStateManager.GameState.Playing)
+                    if (gsm.GetGameState() == GameState.Playing)
                     {
                         UpdateGameLogic();
                     }
@@ -99,33 +99,33 @@ namespace SnakeApplication
                 {
                     case Keys.Space:
                         if (debug) Console.WriteLine("Space is pressed");
-                        if(GameStateManager.GameState.Over != gsm.GetGameState()) gsm.PauseUnpauseGame();
+                        if(GameState.Over != gsm.GetGameState()) gsm.PauseUnpauseGame();
                         break;
 
                     case Keys.W:
                         if(debug) Console.WriteLine("W is pressed");
-                        if(GameStateManager.GameState.Over != gsm.GetGameState()) ChangeSnakeDirection(SnakeDirection.Direction.Up);
+                        if(GameState.Over != gsm.GetGameState()) ChangeSnakeDirection(Direction.Up);
                         break;
 
                     case Keys.A:
                         if (debug) Console.WriteLine("A is pressed");
-                        if(GameStateManager.GameState.Over != gsm.GetGameState()) ChangeSnakeDirection(SnakeDirection.Direction.Left);
+                        if(GameState.Over != gsm.GetGameState()) ChangeSnakeDirection(Direction.Left);
                         break;
 
                     case Keys.S:
                         if (debug) Console.WriteLine("S is pressed");
-                        if (GameStateManager.GameState.Over != gsm.GetGameState()) ChangeSnakeDirection(SnakeDirection.Direction.Down);
+                        if (GameState.Over != gsm.GetGameState()) ChangeSnakeDirection(Direction.Down);
                         break;
 
                     case Keys.D:
                         if (debug) Console.WriteLine("D is pressed");
-                        if (GameStateManager.GameState.Over != gsm.GetGameState()) ChangeSnakeDirection(SnakeDirection.Direction.Right);
+                        if (GameState.Over != gsm.GetGameState()) ChangeSnakeDirection(Direction.Right);
                         break;
                 }
             }
         }
 
-        private void ChangeSnakeDirection(SnakeDirection.Direction newDirection) 
+        private void ChangeSnakeDirection(Direction newDirection) 
         {
             SnakePart snakeHead = gsm.GetSnake().GetSnakeHead();
             if (newDirection != snakeHead.GetSnakeDirection().GetOppositeDirection())
@@ -152,6 +152,7 @@ namespace SnakeApplication
         {
             if (debug) Console.WriteLine("Updating game logic...");
             gsm.GetSnake().Update(mapManager);
+            gsm.RefreshFood();
         }
         #endregion
 

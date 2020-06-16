@@ -26,7 +26,7 @@ namespace SnakeApplication
         {
             SetSnakePartType(PartType.Tail);
             snakeDirection = new SnakeDirection();
-            SetSnakePartDirection(SnakeDirection.Direction.Left);
+            SetSnakePartDirection(Direction.Left);
         }
 
         public SnakeDirection GetSnakeDirection() 
@@ -34,28 +34,28 @@ namespace SnakeApplication
             return snakeDirection;
         }
 
-        public void SetSnakePartDirection(SnakeDirection.Direction direction)
+        public void SetSnakePartDirection(Direction direction)
         {
             snakeDirection.SetCurrentDirection(direction);
 
             switch (snakeDirection.GetCurrentDirection())
             {
-                case SnakeDirection.Direction.Up:
+                case Direction.Up:
                     if (debug) Console.WriteLine("Direction is upwards");
                     snakeImg = Program.RotateImage(snakeImgSource, 90);
                     break;
 
-                case SnakeDirection.Direction.Down:
+                case Direction.Down:
                     if (debug) Console.WriteLine("Direction is downwards");
                     snakeImg = Program.RotateImage(snakeImgSource, 270);
                     break;
 
-                case SnakeDirection.Direction.Left:
+                case Direction.Left:
                     if (debug) Console.WriteLine("Direction is left");
                     snakeImg = snakeImgSource;
                     break;
 
-                case SnakeDirection.Direction.Right:
+                case Direction.Right:
                     if (debug) Console.WriteLine("Direction is right");
                     snakeImg = Program.RotateImage(snakeImgSource, 180);
                     break;
