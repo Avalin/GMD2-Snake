@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -16,12 +15,12 @@ namespace SnakeApplication
         //Render
         private Graphics gfx_details = null;
         private Graphics gfx_main = null;
-        private Image img = null;
+        private Image bitmap = null;
 
-        // GAME MANAGERS
+        // MANAGERS
         MapManager mapManager;
-        GameStateManager gsm;
-        InputManager im;
+        GameStateManager gameStateManager;
+        InputManager inputManager;
 
         public GameWindow()
         {
@@ -30,28 +29,28 @@ namespace SnakeApplication
             InitializeGraphics();
         }
 
-        void ClearDrawSpace()
-        {
-            int[] xy = mapManager.GetMapSize();
-            int tileSize = mapManager.GetTileSize();
-            gfx_main.DrawImage(img, 0, 0);
-            gfx_details.FillRectangle(new SolidBrush(Color.LightBlue), 0, 0, tileSize * xy[0], tileSize * xy[1]);
-        }
-
         void InitializeManagers()
         {
             mapManager = new MapManager(32, 16, 10);
-            gsm = new GameStateManager(GameState.Playing, mapManager);
-            im = new InputManager(gsm);
+            gameStateManager = new GameStateManager(GameState.Playing, mapManager);
+            inputManager = new InputManager(gameStateManager);
         }
 
         void InitializeGraphics() 
         {
-            img = new Bitmap(
+            bitmap = new Bitmap(
                 mapManager.GetTileSize() * mapManager.GetMapSize()[0],
                 mapManager.GetTileSize() * mapManager.GetMapSize()[1]);
             gfx_main = PB_background.CreateGraphics();
-            gfx_details = Graphics.FromImage(img);
+            gfx_details = Graphics.FromImage(bitmap);
+        }
+
+        void ClearDrawSpace()
+        {
+            int[] xy = mapManager.GetMapSize();
+            int tileSize = mapManager.GetTileSize();
+            gfx_main.DrawImage(bitmap, 0, 0);
+            gfx_details.FillRectangle(new SolidBrush(Color.LightBlue), 0, 0, tileSize * xy[0], tileSize * xy[1]);
         }
 
         #region Game Loop Methods
@@ -66,12 +65,12 @@ namespace SnakeApplication
                 TimeSpan deltaTime = current - previous;
                 previous = current;
                 timeBuffer += deltaTime;
-                im.ProcessInput();
+                inputManager.ProcessInput();
 
                 //Fixed timestep for logics, varying for rendering
                 while (timeBuffer >= MS_PER_FRAME)
                 {
-                    if (gsm.GetGameState() == GameState.Playing)
+                    if (gameStateManager.GetGameState() == GameState.Playing)
                     {
                         UpdateGameLogic();
                     }
@@ -97,14 +96,14 @@ namespace SnakeApplication
         }
         private void Draw() 
         {
-            gsm.Draw(mapManager, gfx_details);
+            gameStateManager.Draw(mapManager, gfx_details);
         }
 
         private void UpdateGameLogic()
         {
             if (debug) Console.WriteLine("Updating game logic...");
-            gsm.GetSnake().Update(mapManager);
-            gsm.RefreshFood();
+            gameStateManager.GetSnake().Update(mapManager);
+            gameStateManager.RefreshFood();
         }
         #endregion
 
@@ -116,7 +115,7 @@ namespace SnakeApplication
 
         private void GameWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            im.AddInput(e);
+            inputManager.AddInput(e);
         }
         #endregion
     }
