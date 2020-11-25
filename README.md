@@ -1,2 +1,2 @@
-# GMD2-Snake
+# Snake - Windows Forms
 2D Snake Game using Windows Forms
